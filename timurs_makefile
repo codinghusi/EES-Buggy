@@ -1,0 +1,34 @@
+CC = g++
+CFLAGS = -g -pthread
+MOTORHATPATH = motorhatlib/
+.PHONY: all clean
+
+main: main.o buggy_controller.o terminal.o
+	$(CC) $(CFLAGS) -o main main.o buggy_controller.o buggy_motors.o adafruitmotorhat.o pwm.o adafruitdcmotor.o i2cdevice.o terminal.o
+
+buggy_controller.o: buggy_controller.cpp buggy_controller.h buggy_motors.o terminal.o
+	$(CC) -c buggy_controller.cpp
+
+terminal.o: terminal.cpp terminal.h
+	$(CC) -c terminal.cpp
+
+buggy_motors.o: $(MOTORHATPATH)buggy_motors.cpp $(MOTORHATPATH)buggy_motors.h adafruitmotorhat.o
+	$(CC) -c $(MOTORHATPATH)buggy_motors.cpp
+
+adafruitmotorhat.o: adafruitdcmotor.o pwm.o $(MOTORHATPATH)adafruitmotorhat.cpp $(MOTORHATPATH)adafruitmotorhat.h
+	$(CC) -c $(MOTORHATPATH)adafruitmotorhat.cpp
+
+pwm.o: i2cdevice.o $(MOTORHATPATH)pwm.cpp $(MOTORHATPATH)pwm.h
+	$(CC) -c $(MOTORHATPATH)pwm.cpp
+
+adafruitdcmotor.o: pwm.o $(MOTORHATPATH)adafruitdcmotor.cpp $(MOTORHATPATH)adafruitdcmotor.h
+	$(CC) -c $(MOTORHATPATH)adafruitdcmotor.cpp
+
+i2cdevice.o: $(MOTORHATPATH)i2cdevice.cpp $(MOTORHATPATH)i2cdevice.h
+	$(CC) -c $(MOTORHATPATH)i2cdevice.cpp
+
+
+all: clean main
+
+clean:
+	rm *.o main
