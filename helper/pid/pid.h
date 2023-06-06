@@ -18,5 +18,5 @@ public:
     
 
     PID(float p, float i, float d, float min, float max);
-    float calc(float error);
+    float calculate(float error);
 };
