@@ -96,3 +96,8 @@ void Buggy_Motors::release(){
     motorLeft->run(AdafruitDCMotor::kRelease);
     motorRight->run(AdafruitDCMotor::kRelease);
 }
+
+void Buggy_Motors::release(){
+    motorLeft->run(AdafruitDCMotor::kRelease);
+    motorRight->run(AdafruitDCMotor::kRelease);
+}

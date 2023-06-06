@@ -33,3 +33,7 @@ float PID::calcDerivative(float error, float dt) {
 float PID::calcProportional(float error) {
     return error;
 }
+
+void PID::resetTime() {
+    timer.start();
+}

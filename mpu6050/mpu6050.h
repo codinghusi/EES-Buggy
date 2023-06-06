@@ -11,6 +11,7 @@ class MPU6050 {
 private:
   int fd;
   std::chrono::time_point<std::chrono::steady_clock> lastMeasurement;
+  std::mutex mtx;
 
   float convertRawGyroscopeValue(float oldValue, float value, float drift, float delta);
   float convertRawAccelerometerValue(float value, float delta);

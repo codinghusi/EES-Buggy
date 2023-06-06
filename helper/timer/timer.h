@@ -7,5 +7,5 @@ private:
 
 public:
     void start();
-    float measure(); // in seconds
+    float getElapsedSeconds();
 };

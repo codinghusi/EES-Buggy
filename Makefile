@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -lwiringPi -pthread
+CFLAGS = -lwiringPi -pthread -ipo
 OBJ_NAME = main
 
 DIRS = . ./mpu6050 ./hcsr04 ./motorhatlib ./helper ./helper/angle_difference ./helper/pid ./helper/timer

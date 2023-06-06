@@ -18,12 +18,13 @@ public:
     Buggy_Motors(unsigned speed = 100, unsigned turnspeed = 1.4);
     ~Buggy_Motors();
     void sayHello();
-    inline void setSpeedLeft(unsigned speed) { motorLeft->setSpeed(speed); }
+    inline void setSpeedLeft(int8_t speed) { motorLeft->setSpeed(speed); }
     inline void setSpeedRight(unsigned speed) { motorRight->setSpeed(speed); }
     void setSpeed(unsigned speed);
     void setTurnspeed(unsigned speed);
     void forward();
     void backward();
+    void drive();
     void brake();
     void rotateLeft();
     void rotateRight();

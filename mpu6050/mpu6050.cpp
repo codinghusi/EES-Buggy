@@ -33,6 +33,8 @@ float MPU6050::convertRawAccelerometerValue(float value, float delta) {
 }
 
 void MPU6050::init() {
+  std::lock_guard<std::mutex> lock(mtx);
+
   DEVICE_RESET = 1;
   sleep_for(10ms);
   SLEEP = 0;
@@ -41,6 +43,8 @@ void MPU6050::init() {
 }
 
 void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
+  std::lock_guard<std::mutex> lock(mtx);
+
   INT_LEVEL = 0; // Active HIGH
   INT_OPEN = 0; // Push Pull
   // LATCH_INT_EN = 1; // 'Pending Register' doesn't clear itself
@@ -60,15 +64,15 @@ void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
 }
 
 void MPU6050::interruptTriggered() {
+  std::lock_guard<std::mutex> lock(mtx);
   auto now = std::chrono::steady_clock::now();
   std::chrono::duration<float> duration = now - lastMeasurement;
-  float delta = duration.count();
-  // cout << "delta: " << delta << endl;
-  // cout << "### " << delta * 1000 << "ms" << endl;
   lastMeasurement = now;
+  
   Vec3<int16_t> gyro = { GYRO_X, GYRO_Y, GYRO_Z };
   Vec3<int16_t> accel = { ACCEL_X, ACCEL_Y, ACCEL_Z };
-  // cout << "gxx = " << GYRO_X << " vs " << GYRO_X << " vs " << gyro.x << endl;
+
+  float delta = duration.count();
   gyroscope.x = convertRawGyroscopeValue(gyroscope.x, gyro.x, drift.x, delta);
   gyroscope.y = convertRawGyroscopeValue(gyroscope.y, gyro.y, drift.y, delta);
   gyroscope.z = convertRawGyroscopeValue(gyroscope.z, gyro.z, drift.z, delta);
