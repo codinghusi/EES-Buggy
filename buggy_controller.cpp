@@ -8,15 +8,14 @@
 #include <thread>
 #include <wiringPi.h>
 #include <iostream>
-#include "helper/angle_difference/angle_difference.h"
+#include "motorhatlib/motor_controller.h"
 
-Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed)
+Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed):
+    motors(MotorController(Buggy_Motors(255))) // TODO: rethink speed = 255
 {
-    buggy_motors = new Buggy_Motors(speed);
     // buggy_motors->sayHello();
     wiringPiSetup();
-    ultrasonic_sensor = new HCSR04();
-    ultrasonic_sensor->config(ultrasonicHandler);
+    ultrasonic_sensor.config(ultrasonicHandler);
     gyro_sensor.init();
     gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyroHandler);
 
@@ -33,7 +32,7 @@ Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandl
 }
 
 void Buggy_Controller::ultrasonic_handling(){
-    ultrasonic_sensor->chronometryInterrupt();
+    ultrasonic_sensor.chronometryInterrupt();
 }
 
 void Buggy_Controller::gyro_handling(){
@@ -41,7 +40,7 @@ void Buggy_Controller::gyro_handling(){
 }
 
 void Buggy_Controller::release(){
-    buggy_motors->release();
+    motors.release();
 }
 
 void Buggy_Controller::keyboard_control(){
@@ -61,26 +60,28 @@ void Buggy_Controller::keyboard_control(){
         switch (c)
         {
         case 'w':
-            buggy_motors->forward();
+            motors.setSpeed(abs(motors.getSpeed())); // TODO: not that nice to write it like this
+            motors.drive();
             break;
         case 's':
-            buggy_motors->backward();
+            motors.setSpeed(-abs(motors.getSpeed()));
+            motors.drive();
             break;
         case 'a':
-            buggy_motors->forwardTurnLeft();
+            motors.drive(90, 10);
             break;
         case 'd':
-            buggy_motors->forwardTurnRight();
+            motors.drive(-90, 10);
             break;
         case 'q':
-            buggy_motors->rotateLeft();
+            motors.rotate(-90); // FIXME: can't rotate beyond 90 degrees
             break;
         case 'e':
-            buggy_motors->rotateRight();
+            motors.rotate(90);
             break;
 
         default:
-            buggy_motors->brake();
+            motors.brake();
             break;
         }
     }
@@ -92,35 +93,29 @@ void Buggy_Controller::ultrasonic_control()
     using namespace std::chrono_literals;
     do
     {
-        if (ultrasonic_sensor->get_waitforecho())
+        if (ultrasonic_sensor.get_waitforecho())
             continue;
-        if (ultrasonic_sensor->get_distanceresult() < 50)
+        if (ultrasonic_sensor.get_distanceresult() < 50)
         {
-            if(!prevent_forward) buggy_motors->brake();
+            if(!prevent_forward) motors.brake();
             prevent_forward = true;
-            ultrasonic_sensor->bremslicht_ein();
+            ultrasonic_sensor.bremslicht_ein();
         }
         else
         {
             prevent_forward = false;
-            ultrasonic_sensor->bremslicht_aus();
+            ultrasonic_sensor.bremslicht_aus();
         }
         std::this_thread::sleep_for(20ms);
-        ultrasonic_sensor->distance_messung();
+        ultrasonic_sensor.distance_messung();
     } while (1);
 }
 
 void Buggy_Controller::gyro_control() {
     while(true) {
-        float error = angleDifference(gyro_sensor.gyroscope.z, target_angle);
-        // float relation = correction.calculate(error) / 1000.f;
-        float relation = error / 180.f;
-        buggy_motors->setSpeedLeft(70 * (1.f + relation));
-        buggy_motors->setSpeedRight(70 * (1.f - relation));
+        motors.setCurrentAngle(Angle(gyro_sensor.gyroscope.z));
+        motors.correct();
 
-        std::cout << "Error: " << error << ", Correction: " << relation << std::endl;
-        std::cout << "Gyro: " << gyro_sensor.gyroscope.z << std::endl;
-
-        std::this_thread::sleep_for(100ms);
+        std::this_thread::sleep_for(20ms);
     }
 }

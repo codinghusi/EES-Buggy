@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cmath>
 
 class Angle{
@@ -5,13 +7,14 @@ class Angle{
 public:
     Angle(float angle){ set(angle); }
 
-    void set(float angle){ value = std::fmodf(angle, 360); }
-    float get(){ return value; }
+    void set(float angle) { value = std::fmod(angle, 360); }
+    float get() const { return value; }
 
-    Angle& operator+(float const& angle);
-    Angle &operator+(Angle const &angle);
-    Angle &operator-(float const &angle);
-    Angle &operator-(Angle const &angle);
+    Angle operator+(const float& angle) const;
+    Angle operator+(const Angle& angle) const;
+    Angle operator-(const float& angle) const;
+    Angle operator-(const Angle& angle) const;
+    Angle& operator=(const float& angle);
 };
 
 Angle angleDifference(Angle a, Angle b);

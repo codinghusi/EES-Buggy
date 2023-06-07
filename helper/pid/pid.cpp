@@ -7,7 +7,7 @@ PID::PID(float p, float i, float d, float min, float max): p(p), i(i), d(d), min
 
 float PID::calculate(float error) {
     float derivative, proportional, dt;
-    dt = timer.measure();
+    dt = timer.getElapsedSeconds();
     integral += calcIntegral(error, dt);
     derivative = calcDerivative(error, dt);
     proportional = calcProportional(error);

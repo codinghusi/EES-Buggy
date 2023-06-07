@@ -1,26 +1,28 @@
 #include "angle.h"
 
-Angle &operator+(float const &angle)
+Angle Angle::operator+(const float &angle) const
 {
-    set(value + angle);
-    return *this;
+    return Angle(value + angle);
 }
 
-Angle &operator+(Angle const &angle)
+Angle Angle::operator+(const Angle& angle) const
 {
-    set(value + angle.get());
-    return *this;
+    return Angle(value + angle.get());
 }
 
-Angle &operator-(float const &angle)
+Angle Angle::operator-(const float& angle) const
 {
-    set(value - angle);
-    return *this;
+    return Angle(value - angle);
 }
 
-Angle &operator-(Angle const &angle)
+Angle Angle::operator-(const Angle& angle) const
 {
-    set(value - angle.get());
+    return Angle(value - angle.get());
+}
+
+Angle &Angle::operator=(const float &angle)
+{
+    set(angle);
     return *this;
 }
 

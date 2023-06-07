@@ -1,12 +1,12 @@
 CC = g++
-CFLAGS = -lwiringPi -pthread -ipo
+CFLAGS = -lwiringPi -pthread
 OBJ_NAME = main
 
-DIRS = . ./mpu6050 ./hcsr04 ./motorhatlib ./helper ./helper/angle_difference ./helper/pid ./helper/timer
+DIRS = . ./mpu6050 ./hcsr04 ./motorhatlib ./helper ./helper/angle ./helper/pid ./helper/timer
 OBJ_DIR = ./obj
-EXCLUDE = test-main.cpp #doesn't work...
+EXCLUDE = test-main.cpp
 
-CPP_FILES = $(foreach dir, $(DIRS), $(filter-out $(EXCLUDE), $(wildcard $(dir)/*.cpp)))
+CPP_FILES = $(foreach dir, $(DIRS), $(filter-out %$(EXCLUDE), $(wildcard $(dir)/*.cpp)))
 HPP_FILES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.hpp))
 H_FILES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.h))
 OBJ_FILES = $(patsubst ./%.cpp, $(OBJ_DIR)/%.o, $(CPP_FILES))

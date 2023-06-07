@@ -2,7 +2,7 @@
 #include <chrono>
 #include "buggy_motors.h"
 
-Buggy_Motors::Buggy_Motors(unsigned speed, unsigned turnfactor)
+Buggy_Motors::Buggy_Motors(uint8_t speed, float turnfactor)
 {
     motorLeft = hat.getMotor(1);
     motorRight = hat.getMotor(4);
@@ -88,7 +88,7 @@ void Buggy_Motors::rotateRight()
 
 void Buggy_Motors::forwardTurnLeft()
 {
-    forwardTurnLeft(turnfactor)
+    forwardTurnLeft(turnfactor);
 }
 
 void Buggy_Motors::forwardTurnLeft(float turnfactor)
@@ -100,7 +100,7 @@ void Buggy_Motors::forwardTurnLeft(float turnfactor)
 
 void Buggy_Motors::forwardTurnRight()
 {
-    forwardTurnRight(turnfactor)
+    forwardTurnRight(turnfactor);
 }
 
 void Buggy_Motors::forwardTurnRight(float turnfactor)
@@ -112,7 +112,7 @@ void Buggy_Motors::forwardTurnRight(float turnfactor)
 
 void Buggy_Motors::backwardTurnLeft()
 {
-    backwardTurnLeft(turnfactor)
+    backwardTurnLeft(turnfactor);
 }
 
 void Buggy_Motors::backwardTurnLeft(float turnfactor)
@@ -124,7 +124,7 @@ void Buggy_Motors::backwardTurnLeft(float turnfactor)
 
 void Buggy_Motors::backwardTurnRight()
 {
-    backwardTurnRight(turnfactor)
+    backwardTurnRight(turnfactor);
 }
 
 void Buggy_Motors::backwardTurnRight(float turnfactor)

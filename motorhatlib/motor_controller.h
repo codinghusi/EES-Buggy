@@ -1,3 +1,11 @@
+#pragma once
+
+#include <stdint.h>
+#include "../helper/timer/timer.h"
+#include "../helper/angle/angle.h"
+#include "../helper/pid/pid.h"
+#include "./buggy_motors.h"
+
 
 template<typename T>
 T map(T x, T in_min, T in_max, T out_min, T out_max) {
@@ -13,85 +21,33 @@ class MotorController {
 
     int8_t speed;
     uint8_t startSpeed = 80;
-    int16_t startAngle = 0;
-    int16_t targetAngle = 0;
-    float anglePerSecond = 0;
-    float currentAngle = 0;
+    Angle startAngle = 0.f;
+    Angle targetAngle = 0.f;
+    Angle currentAngle = 0.f;
+    float anglePerSecond = 0.f;
     State state = State::STOPPED;
     State prevState = State::STOPPED;
-    PID pid(1, 1, 1, -1000, 1000);
-    Time delta;
+    PID pid{0.3f, 0.3f, 0.3f, 0.f, 100.f};
+    Timer delta;
 
     Buggy_Motors motors;
 
 public:
 
-    void setSpeed(uint8_t speed) {
-        this->speed = speed;
-        motors.setSpeed(map(abs(speed), 0, 100, startSpeed, 100));
-    }
+    MotorController(Buggy_Motors motors);
 
-    void setTargetAngle(int16_t targetAngle) {
-        this->targetAngle = targetAngle;
-    }
-
-    void drive() {
-        drive(currentAngle, 0);
-    }
-
-    void drive(int16_t targetAngle, float anglePerSecond) {
-        state = State::FORWARD;
-        this->anglePerSecond = anglePerSecond;
-        this->startAngle = currentAngle;
-        setTargetAngle(target_angle);
-
-        motors.drive();
-
-        pid.resetTime();
-        delta.start();
-    }
-
-    void rotate(int16_t targetAngle) {
-        state = State::ROTATING;
-        setTargetAngle(targetAngle);
-
-        if (angleDifference(targetAngle, currentAngle) > 0) {
-            motors.rotateRight();
-        } else {
-            motors.rotateLeft();
-        }
-    }
-
-    void brake() {
-        state = State::STOPPED;
-        motors.brake();
-    }
+    void setSpeed(uint8_t speed);
+    uint8_t getSpeed() { return speed; }
+    void setTargetAngle(Angle targetAngle);
+    void drive();
+    void drive(Angle targetAngle, float anglePerSecond);
+    void rotate(Angle targetAngle);
+    void brake();
+    void release();
 
     // call periodically
-    void setCurrentAngle(float currentAngle) {
-        this->currentAngle = currentAngle;
-    }
+    void setCurrentAngle(Angle currentAngle);
 
     // call periodically
-    void correct() {
-        if (state == State::STOPPED) {
-            return;
-        }
-
-        float diff = abs(angleDifference(currentAngle, targetAngle));
-        if (diff < 5) {
-            brake();
-            break;
-        }
-
-        if (state == State::FORWARD) {
-            float wipTargetAngle = startAngle + (angleDifference(targetAngle, startAngle) / anglePerSecond) * delta.getElapsedSeconds();
-            float correction = pid.calculate() / 1000.;
-            if (angleDifference(wipTargetAngle, currentAngle) > 0) {
-                motors.forwardTurnRight(correction);
-            } else {
-                motors.forwardTurnLeft(-correction);
-            }
-        }
-    }
+    void correct();
 };
