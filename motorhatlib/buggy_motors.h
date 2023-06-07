@@ -2,8 +2,17 @@
 #include "adafruitmotorhat.h"
 
 class Buggy_Motors{
-    float turnspeed;
-    unsigned motorspeed;
+    enum class State
+    {
+        STOPPED,
+        FORWARD,
+        BACKWARD,
+        ROTATING
+    };
+    State leftState = State::STOPPED;
+    State rightState = State::STOPPED;
+    float turnfactor;
+    uint8_t motorspeed;
     AdafruitMotorHAT hat;
     std::shared_ptr<AdafruitDCMotor> motorLeft, motorRight;
 
@@ -15,22 +24,25 @@ class Buggy_Motors{
     inline void brakeRight() { motorRight->run(AdafruitDCMotor::kBrake); }
 
 public:
-    Buggy_Motors(unsigned speed = 100, unsigned turnspeed = 1.4);
+    Buggy_Motors(uint8_t speed = 100, float turnfactor = 0.9);
     ~Buggy_Motors();
     void sayHello();
-    inline void setSpeedLeft(int8_t speed) { motorLeft->setSpeed(speed); }
-    inline void setSpeedRight(unsigned speed) { motorRight->setSpeed(speed); }
-    void setSpeed(unsigned speed);
-    void setTurnspeed(unsigned speed);
+    void setSpeedLeft(int8_t motorspeed);
+    void setSpeedRight(int8_t motorspeed);
+    void setSpeed(int8_t motorspeed);
+    void setTurnfactor(float turnfactor);
     void forward();
     void backward();
-    void drive();
     void brake();
     void rotateLeft();
     void rotateRight();
     void forwardTurnLeft();
+    void forwardTurnLeft(float turnfactor);
     void forwardTurnRight();
+    void forwardTurnRight(float turnfactor);
     void backwardTurnLeft();
+    void backwardTurnLeft(float turnfactor);
     void backwardTurnRight();
+    void backwardTurnRight(float turnfactor);
     void release();
 };
