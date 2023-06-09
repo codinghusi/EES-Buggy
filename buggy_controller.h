@@ -1,3 +1,5 @@
+#pragma once
+
 #include "motorhatlib/motor_controller.h"
 #include "hcsr04/hcsr04.h"
 #include "helper/pid/pid.h"
@@ -6,8 +8,8 @@
 #define GYRO_INTERRUPT_PIN 22
 
 #define MOTORS
-// #define ULTRASONIC
-// #define GYRO
+#define ULTRASONIC
+#define GYRO
 
 class Buggy_Controller
 {
@@ -22,7 +24,7 @@ private:
     bool circumnavigate_right = true;
 
 public:
-    Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed = 10);
+    Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed = 25);
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();

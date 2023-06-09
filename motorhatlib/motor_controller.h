@@ -5,39 +5,46 @@
 #include "../helper/angle/angle.h"
 #include "../helper/pid/pid.h"
 #include "./buggy_motors.h"
+#include <mutex>
 
 
 class MotorController {
+public:
     enum class State {
         STOPPED,
         FORWARD,
         ROTATING
     };
 
-    int8_t speed;
+private:
+    uint8_t speed;
+    bool drivingForward = true;
     
     Angle startAngle = 0.f;
     Angle targetAngle = 0.f;
     Angle currentAngle = 0.f;
     float anglePerSecond = 0.f;
-    State state = State::STOPPED;
-    State prevState = State::STOPPED;
-    PID pid{0.3f, 0.3f, 0.3f, 0.f, 100.f};
+    PID pid{0.1f, 0.1f, 0.8f, -100.f, 100.f};
     Timer delta;
+    std::mutex motorMtx;
 
 public:
+    State state = State::STOPPED;
+    State prevState = State::STOPPED;
+
     Buggy_Motors *motors;
 
-    MotorController(int8_t speed);
+    MotorController(uint8_t speed);
     ~MotorController();
 
-    void setSpeed(int8_t speed);
+    void setSpeed(uint8_t speed);
     void slower(float factor);
-    int8_t getSpeed() { return speed; }
+    uint8_t getSpeed() { return speed; }
     void setTargetAngle(Angle targetAngle);
-    void drive();
     void forwards();
     void backwards();
+    void drive();
+    void driveRelative(Angle targetAngle, float anglePerSecond);
     void drive(Angle targetAngle, float anglePerSecond);
     void rotate(Angle targetAngle);
     void rotateRelative(Angle targetAngle);

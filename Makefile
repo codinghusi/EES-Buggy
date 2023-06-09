@@ -40,6 +40,11 @@ debug:
 run:
 	./$(OBJ_NAME)
 
+pid:
+	rm obj/motorhatlib/motor_controller.o
+	make
+
+
 shit:
 	make
 	make run

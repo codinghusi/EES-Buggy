@@ -21,7 +21,7 @@ class Buggy_Motors{
     uint8_t motorspeed;
     AdafruitMotorHAT hat;
     std::shared_ptr<AdafruitDCMotor> motorLeft, motorRight;
-    uint8_t startSpeed = 80;
+    uint8_t startSpeed = 50; // 80;
 
     inline void forwardLeft() { motorLeft->run(AdafruitDCMotor::kForward); }
     inline void forwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }

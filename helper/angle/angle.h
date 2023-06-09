@@ -7,7 +7,7 @@ class Angle{
 public:
     Angle(float angle){ set(angle); }
 
-    void set(float angle) { value = std::fmod(angle, 360); }
+    void set(float angle) { value = std::fmod(angle, 360.f); }
     float get() const { return value; }
 
     Angle operator+(const float& angle) const;

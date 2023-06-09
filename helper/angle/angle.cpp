@@ -28,10 +28,10 @@ Angle &Angle::operator=(const float &angle)
 
 Angle angleDifference(Angle a, Angle b)
 {
-    Angle diff(a.get() - b.get());
-    if (diff.get() > 180)
-        diff = diff - 360;
-    else if (diff.get() < -180)
-        diff = diff + 360;
+    Angle diff = a - b;
+    if (diff.get() > 180.f)
+        diff = diff - 360.f;
+    else if (diff.get() < -180.f)
+        diff = diff + 360.f;
     return diff;
 }

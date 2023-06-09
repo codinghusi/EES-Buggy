@@ -33,7 +33,7 @@ int main()
 }
 
 void ultrasonicHandler(){
-    // buggy.ultrasonic_handling();
+    buggy.ultrasonic_handling();
 }
 
 void gyroHandler() {

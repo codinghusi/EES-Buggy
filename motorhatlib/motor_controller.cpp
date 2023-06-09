@@ -1,9 +1,11 @@
 #include "motor_controller.h"
+#include <iostream>
 
 // FIXME: add moving backwards and turning while moving backwards
 
-MotorController::MotorController(int8_t speed): motors(new Buggy_Motors(speed))
+MotorController::MotorController(uint8_t speed): motors(new Buggy_Motors(speed))
 {
+    setSpeed(speed);
 }
 
 MotorController::~MotorController()
@@ -12,13 +14,14 @@ MotorController::~MotorController()
 }
 
 void MotorController::slower(float factor) {
-    motors->setSpeed(abs(speed * factor));
+    motors->setSpeed(speed * factor);
 }
 
-void MotorController::setSpeed(int8_t speed)
+void MotorController::setSpeed(uint8_t speed)
 {
+    std::cout << "set speed to " << (int) speed << std::endl;
     this->speed = speed;
-    motors->setSpeed(abs(speed));
+    motors->setSpeed(speed);
 }
 
 void MotorController::setTargetAngle(Angle targetAngle)
@@ -33,20 +36,25 @@ void MotorController::drive()
 
 void MotorController::forwards()
 {
-    if (speed < 0) {
-        setSpeed(-speed);
-    }
+    drivingForward = true;
+    motors->forward();
 }
 
 void MotorController::backwards()
 {
-    if (speed > 0) {
-        setSpeed(-speed);
-    }
+    drivingForward = false;
+    motors->backward();
+}
+
+void MotorController::driveRelative(Angle targetAngle, float anglePerSecond) {
+    std::cout << (currentAngle + targetAngle).get() << std::endl;
+    drive(currentAngle + targetAngle, anglePerSecond);
 }
 
 void MotorController::drive(Angle targetAngle, float anglePerSecond)
 {
+    std::unique_lock<std::mutex> lock(motorMtx);
+
     state = State::FORWARD;
     this->anglePerSecond = anglePerSecond;
     this->startAngle = currentAngle;
@@ -62,28 +70,34 @@ void MotorController::rotateRelative(Angle targetAngle)
 
 void MotorController::rotate(Angle targetAngle)
 {
+    std::unique_lock<std::mutex> lock(motorMtx);
+
     state = State::ROTATING;
     setTargetAngle(targetAngle);
 
-    if (angleDifference(targetAngle, currentAngle).get() < 0)
-    {
-        motors->rotateRight();
-    }
-    else
-    {
-        motors->rotateLeft();
-    }
+    // if (angleDifference(targetAngle, currentAngle).get() < 0)
+    // {
+    //     motors->rotateRight();
+    // }
+    // else
+    // {
+    //     motors->rotateLeft();
+    // }
 }
 
 void MotorController::brake()
 {
+    std::unique_lock<std::mutex> lock(motorMtx);
+
     state = State::STOPPED;
     motors->brake();
 }
 
 void MotorController::release()
 {
-    state = State::STOPPED;
+    std::unique_lock<std::mutex> lock(motorMtx);
+
+    brake();
     motors->release();
 }
 
@@ -94,58 +108,72 @@ void MotorController::setCurrentAngle(Angle currentAngle)
 
 void MotorController::correct()
 {
+    std::unique_lock<std::mutex> lock(motorMtx);
+
     if (state == State::STOPPED)
     {
         return;
     }
 
-    constexpr float nearingEpsilon = 10;
-    constexpr float epsilon = 4;
+    // constexpr float nearingEpsilon = 10;
+    const float nearingEpsilon = 90;
+    const float epsilon = 5;
 
-    float diff = abs(angleDifference(currentAngle, targetAngle).get());
+
+
+    float diff = angleDifference(targetAngle, currentAngle).get();
+    float diffAbs = abs(diff);
+
+    // std::cout << "diff: " << diff << ", curr: " << currentAngle.get() << ", target: " << targetAngle.get() << std::endl;
+
 
     if (state == State::FORWARD)
     {
-        if (diff < epsilon)
+        // setSpeed(50);
+        anglePerSecond = 50.f;
+        // float wipTargetAngle = startAngle.get() + (angleDifference(targetAngle, startAngle).get() / anglePerSecond) * delta.getElapsedSeconds();
+        Angle wipTargetAngle = targetAngle;
+        // float wipTargetAngle = startAngle.get() + 
+        float error = abs(angleDifference(wipTargetAngle, currentAngle).get());
+        float correction = pid.calculate(error);
+        std::cout << "speed: " << (int)speed << "error: " << error << " correction: " << correction << std::endl;
+        if (diff < 0)
         {
-            anglePerSecond = 0;
-            targetAngle = currentAngle;
-        }
-        float wipTargetAngle = startAngle.get() + (angleDifference(targetAngle, startAngle).get() / anglePerSecond) * delta.getElapsedSeconds();
-        float error = angleDifference(wipTargetAngle, currentAngle).get();
-        float correction = pid.calculate(error) / 100.f;
-        if (angleDifference(wipTargetAngle, currentAngle).get() < 0)
-        {
-            if (speed >= 0) {
+            if (drivingForward) {
                 motors->forwardTurnRight(correction);
             } else {
-                motors->backwardTurnRight(correction);
+                motors->backwardTurnLeft(correction);
             }
         }
         else
         {
-            if (speed >= 0) {
-                motors->forwardTurnLeft(-correction);
-            } else {
-                motors->backwardTurnLeft(-correction);
+            if (drivingForward) {
+                motors->forwardTurnLeft(correction);
+            } else { 
+                motors->backwardTurnRight(correction);
             }
         }
     }
     else if (state == State::ROTATING)
     {
-        // FIXME: not synchronized!!
-        if (angleDifference(currentAngle, targetAngle).get() < 0) {
+        if (diff < 0) {
             motors->rotateRight();
         }
         else {
             motors->rotateLeft();
         }
 
-        if (diff < epsilon) {
+        if (diffAbs < epsilon) {
+            lock.unlock();
+            // slower(1);
             brake();
+            lock.lock();
         }
-        else if (diff < nearingEpsilon) {
-            slower(0);
+        else if (diffAbs < nearingEpsilon) {
+            // lock.unlock();
+            // slower(0);
+            // std::cout << "nearingEpsilon" << std::endl;
+            // lock.lock();
         }
     }
 }

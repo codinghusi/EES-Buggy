@@ -8,6 +8,7 @@ private:
     float min;
     float max;
     float lastError = 0;
+    float test = 0.1;
 
     float p, i, d;
     
