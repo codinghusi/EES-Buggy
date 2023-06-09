@@ -31,13 +31,13 @@ void Buggy_Motors::sayHello()
 void Buggy_Motors::setSpeedLeft(int8_t speed)
 {
     leftState = speed < 0 ? State::BACKWARD : State::FORWARD;
-    motorLeft->setSpeed(speed);
+    motorLeft->setSpeed(mapSpeed(speed));
 }
 
 void Buggy_Motors::setSpeedRight(int8_t speed)
 {
     rightState = speed < 0 ? State::BACKWARD : State::FORWARD;
-    motorRight->setSpeed(speed);
+    motorRight->setSpeed(mapSpeed(speed));
 }
 
 void Buggy_Motors::setSpeed(int8_t speed)

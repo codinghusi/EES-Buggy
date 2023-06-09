@@ -7,11 +7,6 @@
 #include "./buggy_motors.h"
 
 
-template<typename T>
-T map(T x, T in_min, T in_max, T out_min, T out_max) {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 class MotorController {
     enum class State {
         STOPPED,
@@ -20,7 +15,7 @@ class MotorController {
     };
 
     int8_t speed;
-    uint8_t startSpeed = 40;
+    
     Angle startAngle = 0.f;
     Angle targetAngle = 0.f;
     Angle currentAngle = 0.f;
@@ -37,12 +32,13 @@ public:
     MotorController(int8_t speed);
     ~MotorController();
 
-    void setSpeed(uint8_t speed);
-    void setSpeedIntern(uint8_t speed);
+    void setSpeed(int8_t speed);
     void slower(float factor);
-    uint8_t getSpeed() { return speed; }
+    int8_t getSpeed() { return speed; }
     void setTargetAngle(Angle targetAngle);
     void drive();
+    void forwards();
+    void backwards();
     void drive(Angle targetAngle, float anglePerSecond);
     void rotate(Angle targetAngle);
     void rotateRelative(Angle targetAngle);

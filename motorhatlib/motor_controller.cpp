@@ -12,18 +12,13 @@ MotorController::~MotorController()
 }
 
 void MotorController::slower(float factor) {
-    setSpeedIntern(speed * factor);
+    motors->setSpeed(abs(speed * factor));
 }
 
-void MotorController::setSpeed(uint8_t speed)
+void MotorController::setSpeed(int8_t speed)
 {
     this->speed = speed;
-   setSpeedIntern(speed);
-}
-
-void MotorController::setSpeedIntern(uint8_t speed)
-{
-    motors->setSpeed(map<uint8_t>(abs(speed), 0, 100, startSpeed, 255));
+    motors->setSpeed(abs(speed));
 }
 
 void MotorController::setTargetAngle(Angle targetAngle)
@@ -36,15 +31,26 @@ void MotorController::drive()
     drive(currentAngle, 0);
 }
 
+void MotorController::forwards()
+{
+    if (speed < 0) {
+        setSpeed(-speed);
+    }
+}
+
+void MotorController::backwards()
+{
+    if (speed > 0) {
+        setSpeed(-speed);
+    }
+}
+
 void MotorController::drive(Angle targetAngle, float anglePerSecond)
 {
     state = State::FORWARD;
     this->anglePerSecond = anglePerSecond;
     this->startAngle = currentAngle;
     setTargetAngle(targetAngle);
-
-    motors->forward();
-
     pid.resetTime();
     delta.start();
 }
@@ -110,11 +116,19 @@ void MotorController::correct()
         float correction = pid.calculate(error) / 100.f;
         if (angleDifference(wipTargetAngle, currentAngle).get() < 0)
         {
-            motors->forwardTurnRight(correction);
+            if (speed >= 0) {
+                motors->forwardTurnRight(correction);
+            } else {
+                motors->backwardTurnRight(correction);
+            }
         }
         else
         {
-            motors->forwardTurnLeft(-correction);
+            if (speed >= 0) {
+                motors->forwardTurnLeft(-correction);
+            } else {
+                motors->backwardTurnLeft(-correction);
+            }
         }
     }
     else if (state == State::ROTATING)

@@ -10,7 +10,7 @@
 #include <iostream>
 #include "motorhatlib/motor_controller.h"
 
-Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed):
+Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed):
     motors(speed)
 {
     // buggy_motors->sayHello();
@@ -60,11 +60,11 @@ void Buggy_Controller::keyboard_control(){
         switch (c)
         {
         case 'w':
-            motors.setSpeed(abs(motors.getSpeed())); // TODO: not that nice to write it like this
+            motors.forwards();
             motors.drive();
             break;
         case 's':
-            motors.setSpeed(-abs(motors.getSpeed()));
+            motors.backwards();
             motors.drive();
             break;
         case 'a':

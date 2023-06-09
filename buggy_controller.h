@@ -18,7 +18,7 @@ private:
     bool prevent_forward;
 
 public:
-    Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed = 100);
+    Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed = 10);
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();
@@ -28,3 +28,4 @@ public:
 };
 
 void handler();
+ 

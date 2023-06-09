@@ -1,5 +1,11 @@
 #pragma once
 #include "adafruitmotorhat.h"
+#include <math.h>
+
+template<typename T>
+T map(T x, T in_min, T in_max, T out_min, T out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 class Buggy_Motors{
     enum class State
@@ -15,6 +21,7 @@ class Buggy_Motors{
     uint8_t motorspeed;
     AdafruitMotorHAT hat;
     std::shared_ptr<AdafruitDCMotor> motorLeft, motorRight;
+    uint8_t startSpeed = 80;
 
     inline void forwardLeft() { motorLeft->run(AdafruitDCMotor::kForward); }
     inline void forwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }
@@ -22,6 +29,9 @@ class Buggy_Motors{
     inline void backwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
     inline void brakeLeft() { motorLeft->run(AdafruitDCMotor::kBrake); }
     inline void brakeRight() { motorRight->run(AdafruitDCMotor::kBrake); }
+    inline float mapSpeed(uint8_t speed) {
+        return map<uint8_t>(abs(speed), 0, 100, startSpeed, 255);
+    }
 
 public:
     Buggy_Motors(uint8_t speed = 100, float turnfactor = 0.9);
