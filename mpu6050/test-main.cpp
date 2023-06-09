@@ -22,11 +22,6 @@ void gyroInterrupt() {
 void loop();
 void setup();
 
-// int main() {
-//   setup();
-//   while(true) loop(); 
-// }
-
 void setup() {
   {
     lock_guard<mutex> guard(mtx);
@@ -73,15 +68,5 @@ void loop() {
   cout << (int) gyro.gyroscope.y << "   ";
   cout << (int) gyro.gyroscope.z << "   ";
   cout.flush();
-
-  /*if (gyro.accelerometer.y < 50e-5) {
-    return;
-  }
-
-  cout << '\r';
-  cout << (int) (gyro.accelerometer.x * 1e5) << "   ";
-  cout << (int) (gyro.accelerometer.y * 1e5) << "   ";
-  cout << (int) (gyro.accelerometer.z * 1e5) << "   ";
-  cout.flush();*/
   sleep_for(100ms);
 }

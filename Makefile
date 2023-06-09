@@ -2,13 +2,13 @@ CC = g++
 CFLAGS = -g -lwiringPi -pthread
 OBJ_NAME = main
 
-DIRS = . ./mpu6050 ./hcsr04 ./motorhatlib ./helper ./helper/angle ./helper/pid ./helper/timer
 OBJ_DIR = ./obj
 EXCLUDE = test-main.cpp
 
-CPP_FILES = $(foreach dir, $(DIRS), $(filter-out %$(EXCLUDE), $(wildcard $(dir)/*.cpp)))
-HPP_FILES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.hpp))
-H_FILES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.h))
+
+CPP_FILES = $(filter-out %$(EXCLUDE), $(shell find . -name '*.cpp'))
+HPP_FILES = $(shell find . -name '*.hpp')
+H_FILES = $(shell find . -name '*.h')
 OBJ_FILES = $(patsubst ./%.cpp, $(OBJ_DIR)/%.o, $(CPP_FILES))
 OBJ_DIRS = $(foreach dir, $(DIRS), $(patsubst ./%, $(OBJ_DIR)/%/, $(dir)))
 
@@ -18,32 +18,33 @@ all: $(OBJ_NAME)
 	$(info If you are lazy you can make and run using 'make shit')
 	$(info )
 
-$(OBJ_NAME): $(OBJ_FILES)
+$(OBJ_NAME): $(OBJ_FILES) .dependencies
 	$(CC) -o $@ $(OBJ_FILES) $(CFLAGS)
 	$(info )
 	$(info Linking as ./$(OBJ_NAME))
 
 $(OBJ_DIR)/%.o: %.cpp $(HPP_FILES) $(findstring %.h, $(H_FILES))
 	@mkdir -p $(dir $@)
-	$(CC) -c -o "$@" "$<" $(CFLAGS)
+	@$(CC) -c -o "$@" "$<" $(CFLAGS)
+	$(info compiling $<)
 
 clean:
 	rm -f $(OBJ_FILES) $(OBJ_NAME)
+
+.dependencies: $(CPP_FILES) $(H_FILES)
+	$(info )
+	$(info updating dependencies)
+	@rm -f "$@"
+	@$(CC) $(CFLAGS) -MM $^ > "$@"
 
 debug:
 	$(info )
 	$(info CPP_FILES: $(CPP_FILES))
 	$(info OBJ_FILES: $(OBJ_FILES))
-	$(info HEADER_FILES: $(HEADER_FILES))
-	$(info OBJ_DIRS: $(OBJ_DIRS))
+	$(info HEADER_FILES: $(H_FILES))
 
 run:
 	./$(OBJ_NAME)
-
-pid:
-	rm obj/motorhatlib/motor_controller.o
-	make
-
 
 shit:
 	make

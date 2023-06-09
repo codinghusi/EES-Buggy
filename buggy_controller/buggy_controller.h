@@ -1,9 +1,9 @@
 #pragma once
 
-#include "motorhatlib/motor_controller.h"
-#include "hcsr04/hcsr04.h"
-#include "helper/pid/pid.h"
-#include "mpu6050/mpu6050.h"
+#include "../motors/adafruit/motorhat/adafruitmotorhat.h"
+#include "../hcsr04/hcsr04.h"
+#include "../mpu6050/mpu6050.h"
+#include "../motors/motor_controller/motor_controller.h"
 
 #define GYRO_INTERRUPT_PIN 22
 
@@ -17,7 +17,6 @@ private:
     MotorController motors;
     HCSR04 ultrasonic_sensor;
     MPU6050 gyro_sensor;
-    PID correction{1, 1, 1, -1000, 1000};
     float target_angle = 0;
     float motor_relation = 1.f;
     bool prevent_forward;
@@ -36,6 +35,3 @@ public:
     void runOver();
     void circumnavigate();
 };
-
-void handler();
- 

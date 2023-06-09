@@ -1,8 +1,6 @@
 #include "motor_controller.h"
 #include <iostream>
 
-// FIXME: add moving backwards and turning while moving backwards
-
 MotorController::MotorController(uint8_t speed): motors(new Buggy_Motors(speed))
 {
     setSpeed(speed);
@@ -13,13 +11,13 @@ MotorController::~MotorController()
     delete motors;
 }
 
-void MotorController::slower(float factor) {
+void MotorController::slower(float factor)
+{
     motors->setSpeed(speed * factor);
 }
 
 void MotorController::setSpeed(uint8_t speed)
 {
-    std::cout << "set speed to " << (int) speed << std::endl;
     this->speed = speed;
     motors->setSpeed(speed);
 }
@@ -31,7 +29,7 @@ void MotorController::setTargetAngle(Angle targetAngle)
 
 void MotorController::drive()
 {
-    drive(currentAngle, 0);
+    drive(currentAngle);
 }
 
 void MotorController::forwards()
@@ -46,21 +44,17 @@ void MotorController::backwards()
     motors->backward();
 }
 
-void MotorController::driveRelative(Angle targetAngle, float anglePerSecond) {
-    std::cout << (currentAngle + targetAngle).get() << std::endl;
-    drive(currentAngle + targetAngle, anglePerSecond);
+void MotorController::driveRelative(Angle targetAngle)
+{
+    drive(currentAngle + targetAngle);
 }
 
-void MotorController::drive(Angle targetAngle, float anglePerSecond)
+void MotorController::drive(Angle targetAngle)
 {
     std::unique_lock<std::mutex> lock(motorMtx);
-
     state = State::FORWARD;
-    this->anglePerSecond = anglePerSecond;
     this->startAngle = currentAngle;
     setTargetAngle(targetAngle);
-    pid.resetTime();
-    delta.start();
 }
 
 void MotorController::rotateRelative(Angle targetAngle)
@@ -71,24 +65,15 @@ void MotorController::rotateRelative(Angle targetAngle)
 void MotorController::rotate(Angle targetAngle)
 {
     std::unique_lock<std::mutex> lock(motorMtx);
-
     state = State::ROTATING;
     setTargetAngle(targetAngle);
-
-    // if (angleDifference(targetAngle, currentAngle).get() < 0)
-    // {
-    //     motors->rotateRight();
-    // }
-    // else
-    // {
-    //     motors->rotateLeft();
-    // }
 }
 
-void MotorController::brake()
+void MotorController::brake(bool doLock)
 {
-    std::unique_lock<std::mutex> lock(motorMtx);
-
+    if (doLock) {
+        std::unique_lock<std::mutex> lock(motorMtx);
+    }
     state = State::STOPPED;
     motors->brake();
 }
@@ -96,7 +81,6 @@ void MotorController::brake()
 void MotorController::release()
 {
     std::unique_lock<std::mutex> lock(motorMtx);
-
     brake();
     motors->release();
 }
@@ -115,28 +99,12 @@ void MotorController::correct()
         return;
     }
 
-    // constexpr float nearingEpsilon = 10;
-    const float nearingEpsilon = 90;
     const float epsilon = 5;
-
-
-
     float diff = angleDifference(targetAngle, currentAngle).get();
-    float diffAbs = abs(diff);
 
-    // std::cout << "diff: " << diff << ", curr: " << currentAngle.get() << ", target: " << targetAngle.get() << std::endl;
-
-
-    if (state == State::FORWARD)
-    {
-        // setSpeed(50);
-        anglePerSecond = 50.f;
-        // float wipTargetAngle = startAngle.get() + (angleDifference(targetAngle, startAngle).get() / anglePerSecond) * delta.getElapsedSeconds();
-        Angle wipTargetAngle = targetAngle;
-        // float wipTargetAngle = startAngle.get() + 
-        float error = abs(angleDifference(wipTargetAngle, currentAngle).get());
-        float correction = pid.calculate(error);
-        std::cout << "speed: " << (int)speed << "error: " << error << " correction: " << correction << std::endl;
+    if (state == State::FORWARD) {
+        float error = abs(angleDifference(targetAngle, currentAngle).get());
+        float correction = error >= 1 ? 0 : 1;
         if (diff < 0)
         {
             if (drivingForward) {
@@ -145,8 +113,7 @@ void MotorController::correct()
                 motors->backwardTurnLeft(correction);
             }
         }
-        else
-        {
+        else {
             if (drivingForward) {
                 motors->forwardTurnLeft(correction);
             } else { 
@@ -154,8 +121,7 @@ void MotorController::correct()
             }
         }
     }
-    else if (state == State::ROTATING)
-    {
+    else if (state == State::ROTATING) {
         if (diff < 0) {
             motors->rotateRight();
         }
@@ -163,17 +129,8 @@ void MotorController::correct()
             motors->rotateLeft();
         }
 
-        if (diffAbs < epsilon) {
-            lock.unlock();
-            // slower(1);
-            brake();
-            lock.lock();
-        }
-        else if (diffAbs < nearingEpsilon) {
-            // lock.unlock();
-            // slower(0);
-            // std::cout << "nearingEpsilon" << std::endl;
-            // lock.lock();
+        if (abs(diff) < epsilon) {
+            brake(false);
         }
     }
 }

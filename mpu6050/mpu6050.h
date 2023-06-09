@@ -1,7 +1,7 @@
-#include "DistributedBits.hpp"
-#include "Word.hpp"
-#include "Bits.hpp"
-#include "Vec3.hpp"
+#include "utils/DistributedBits.hpp"
+#include "utils/Word.hpp"
+#include "utils/Bits.hpp"
+#include "utils/Vec3.hpp"
 #include <chrono>
 #include <mutex>
 
@@ -15,7 +15,6 @@ private:
 
   float convertRawGyroscopeValue(float oldValue, float value, float drift, float delta);
   float convertRawAccelerometerValue(float value, float delta);
-  float accumulateZKoordinate();
 
 public:
   MPU6050(uint8_t address = 0x68);

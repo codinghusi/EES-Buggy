@@ -25,7 +25,7 @@
  */
 
 #include "adafruitdcmotor.h"
-#include "util.h"
+#include "../util.h"
 
 #include <iostream>
 #include <algorithm>

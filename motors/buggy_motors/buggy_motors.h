@@ -1,5 +1,5 @@
 #pragma once
-#include "adafruitmotorhat.h"
+#include "../adafruit/motorhat/adafruitmotorhat.h"
 #include <math.h>
 
 template<typename T>
@@ -29,9 +29,7 @@ class Buggy_Motors{
     inline void backwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
     inline void brakeLeft() { motorLeft->run(AdafruitDCMotor::kBrake); }
     inline void brakeRight() { motorRight->run(AdafruitDCMotor::kBrake); }
-    inline float mapSpeed(uint8_t speed) {
-        return map<uint8_t>(abs(speed), 0, 100, startSpeed, 255);
-    }
+    inline float mapSpeed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, startSpeed, 255); }
 
 public:
     Buggy_Motors(uint8_t speed = 100, float turnfactor = 0.9);

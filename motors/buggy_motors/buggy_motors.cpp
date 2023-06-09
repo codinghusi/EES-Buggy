@@ -34,7 +34,6 @@ void Buggy_Motors::setSpeedLeft(int8_t speed)
         brakeLeft();
         return;
     }
-    leftState = speed < 0 ? State::BACKWARD : State::FORWARD;
     motorLeft->setSpeed(mapSpeed(speed));
 }
 
@@ -44,7 +43,6 @@ void Buggy_Motors::setSpeedRight(int8_t speed)
         brakeRight();
         return;
     }
-    rightState = speed < 0 ? State::BACKWARD : State::FORWARD;
     motorRight->setSpeed(mapSpeed(speed));
 }
 
@@ -142,7 +140,8 @@ void Buggy_Motors::backwardTurnRight(float turnfactor)
     backward();
 }
 
-void Buggy_Motors::release(){
+void Buggy_Motors::release()
+{
     motorLeft->run(AdafruitDCMotor::kRelease);
     motorRight->run(AdafruitDCMotor::kRelease);
 }

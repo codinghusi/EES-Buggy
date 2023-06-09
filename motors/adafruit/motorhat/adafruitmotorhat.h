@@ -1,5 +1,5 @@
 /**
- *  adafruitdcmotor.h
+ *  adafruitmotorhat.h
  *
  *  MIT License
  *
@@ -26,34 +26,26 @@
 
 #pragma once
 
-#include "pwm.h"
+#include "../pwm.h"
+#include "../dcmotor/adafruitdcmotor.h"
 
-class AdafruitDCMotor
+#include <memory>
+#include <vector>
+
+class AdafruitMotorHAT
 {
 public:
-    enum Command
-    {
-        kForward = 1,
-        kBackward = 2,
-        kBrake = 3,
-        kRelease = 4,
-    };
+    AdafruitMotorHAT (int address = 0x60, int freq = 1600);
 
-    AdafruitDCMotor (PWM& pwm, int index);
-
-    /** Makes the motor perform an action.
-     *  @see Commands
+    /** Get one of the DC motors controlled by the HAT.
+     *  Expects a value between 1 and 4 inclusive.
+     *  If the number is out-of-range, the shared pointer
+     *  returned from the method will be empty.
      */
-    void run (Command command);
-
-    /** Sets the speed of the motor.
-     *  Expects a value between 0 and 255 inclusive.
-     */
-    void setSpeed (int speed);
+    std::shared_ptr<AdafruitDCMotor> getMotor (unsigned int number);
 
 private:
-    void setPin (int pin, bool enabled);
-
-    PWM& controller;
-    int pwmPin = 0, in1Pin = 0, in2Pin = 0;
+    PWM controller;
+    const int frequency;
+    std::vector<std::shared_ptr<AdafruitDCMotor>> dcMotors;
 };

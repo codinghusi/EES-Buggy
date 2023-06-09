@@ -2,8 +2,8 @@
 #include <chrono>
 #include <signal.h>
 #include <iostream>
-#include "buggy_controller.h"
-#include "terminal.h"
+#include "buggy_controller/buggy_controller.h"
+#include "terminal/terminal.h"
 
 void ultrasonicHandler();
 void gyroHandler();
@@ -13,7 +13,6 @@ Buggy_Controller buggy(ultrasonicHandler, gyroHandler);
 void signalHandler(int signum)
 {
     std::cout << "Strg-C Programmende" << std::endl;
-    // buggy.release();
 	disableRawMode();
     exit(signum);
 }

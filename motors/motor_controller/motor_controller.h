@@ -1,10 +1,8 @@
 #pragma once
 
 #include <stdint.h>
-#include "../helper/timer/timer.h"
-#include "../helper/angle/angle.h"
-#include "../helper/pid/pid.h"
-#include "./buggy_motors.h"
+#include "../../utils/angle/angle.h"
+#include "../buggy_motors/buggy_motors.h"
 #include <mutex>
 
 
@@ -23,9 +21,6 @@ private:
     Angle startAngle = 0.f;
     Angle targetAngle = 0.f;
     Angle currentAngle = 0.f;
-    float anglePerSecond = 0.f;
-    PID pid{0.1f, 0.1f, 0.8f, -100.f, 100.f};
-    Timer delta;
     std::mutex motorMtx;
 
 public:
@@ -44,11 +39,11 @@ public:
     void forwards();
     void backwards();
     void drive();
-    void driveRelative(Angle targetAngle, float anglePerSecond);
-    void drive(Angle targetAngle, float anglePerSecond);
+    void driveRelative(Angle targetAngle);
+    void drive(Angle targetAngle);
     void rotate(Angle targetAngle);
     void rotateRelative(Angle targetAngle);
-    void brake();
+    void brake(bool doLock = true);
     void release();
 
     // call periodically
