@@ -30,9 +30,8 @@ class MotorController {
     PID pid{0.3f, 0.3f, 0.3f, 0.f, 100.f};
     Timer delta;
 
-    Buggy_Motors* motors;
-
 public:
+    Buggy_Motors *motors;
 
     MotorController(int8_t speed);
     ~MotorController();

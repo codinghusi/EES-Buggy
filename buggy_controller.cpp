@@ -119,3 +119,92 @@ void Buggy_Controller::gyro_control() {
         std::this_thread::sleep_for(20ms);
     }
 }
+
+void Buggy_Controller::slalom()
+{
+#ifdef MOTORS
+    motors.motors->forward();
+    std::this_thread::sleep_for(200ms);
+    circumnavigate();
+    motors.motors->forward();
+    std::this_thread::sleep_for(200ms);
+    circumnavigate();
+#endif
+#ifdef ULTRASONIC
+    motors.motors->forward();
+    while (!prevent_forward)
+        ;
+    circumnavigate();
+    motors.motors->forward();
+    while (!prevent_forward)
+        ;
+    circumnavigate();
+#endif
+#ifdef GYRO
+#endif
+}
+
+void Buggy_Controller::rectangle()
+{
+    using namespace std::chrono_literals;
+#if defined(MOTORS) || defined(ULTRASONIC)
+    std::chrono::milliseconds rotationtime = std::chrono::milliseconds(200);
+    std::chrono::milliseconds forwardtime = std::chrono::milliseconds(200);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->brake();
+#endif
+#ifdef GYRO
+#endif
+}
+
+void Buggy_Controller::runOver()
+{
+    using namespace std::chrono_literals;
+    motors.motors->backward();
+    std::this_thread::sleep_for(200ms);
+    motors.motors->forward();
+    std::this_thread::sleep_for(1s);
+    motors.motors->brake();
+}
+
+void Buggy_Controller::circumnavigate()
+{
+    using namespace std::chrono_literals;
+#if defined(MOTORS) || defined(ULTRASONIC)
+    std::chrono::milliseconds rotationtime = std::chrono::milliseconds(200);
+    std::chrono::milliseconds forwardtime = std::chrono::milliseconds(200);
+    circumnavigate_right ? motors.motors->rotateRight() : motors.motors->rotateLeft();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    circumnavigate_right ? motors.motors->rotateLeft() : motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    circumnavigate_right ? motors.motors->rotateLeft() : motors.motors->rotateRight();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->forward();
+    std::this_thread::sleep_for(forwardtime);
+    circumnavigate_right ? motors.motors->rotateRight() : motors.motors->rotateLeft();
+    std::this_thread::sleep_for(rotationtime);
+    motors.motors->brake();
+#endif
+#ifdef GYRO
+#endif
+    circumnavigate_right = !circumnavigate_right;
+}

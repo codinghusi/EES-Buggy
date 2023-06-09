@@ -5,6 +5,9 @@
 
 #define GYRO_INTERRUPT_PIN 22
 
+#define MOTORS
+// #define ULTRASONIC
+// #define GYRO
 
 class Buggy_Controller
 {
@@ -16,6 +19,7 @@ private:
     float target_angle = 0;
     float motor_relation = 1.f;
     bool prevent_forward;
+    bool circumnavigate_right = true;
 
 public:
     Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed = 100);
@@ -25,6 +29,10 @@ public:
     void gyro_handling();
     void gyro_control();
     void release();
+    void slalom();
+    void rectangle();
+    void runOver();
+    void circumnavigate();
 };
 
 void handler();
