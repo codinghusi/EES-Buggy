@@ -13,7 +13,7 @@ Buggy_Controller buggy(ultrasonicHandler, gyroHandler);
 void signalHandler(int signum)
 {
     std::cout << "Strg-C Programmende" << std::endl;
-    buggy.release();
+    // buggy.release();
 	disableRawMode();
     exit(signum);
 }
@@ -33,7 +33,7 @@ int main()
 }
 
 void ultrasonicHandler(){
-    buggy.ultrasonic_handling();
+    // buggy.ultrasonic_handling();
 }
 
 void gyroHandler() {

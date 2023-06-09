@@ -20,7 +20,7 @@ class MotorController {
     };
 
     int8_t speed;
-    uint8_t startSpeed = 80;
+    uint8_t startSpeed = 40;
     Angle startAngle = 0.f;
     Angle targetAngle = 0.f;
     Angle currentAngle = 0.f;
@@ -30,18 +30,22 @@ class MotorController {
     PID pid{0.3f, 0.3f, 0.3f, 0.f, 100.f};
     Timer delta;
 
-    Buggy_Motors motors;
+    Buggy_Motors* motors;
 
 public:
 
-    MotorController(Buggy_Motors motors);
+    MotorController(int8_t speed);
+    ~MotorController();
 
     void setSpeed(uint8_t speed);
+    void setSpeedIntern(uint8_t speed);
+    void slower(float factor);
     uint8_t getSpeed() { return speed; }
     void setTargetAngle(Angle targetAngle);
     void drive();
     void drive(Angle targetAngle, float anglePerSecond);
     void rotate(Angle targetAngle);
+    void rotateRelative(Angle targetAngle);
     void brake();
     void release();
 

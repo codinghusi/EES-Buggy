@@ -2,14 +2,28 @@
 
 // FIXME: add moving backwards and turning while moving backwards
 
-MotorController::MotorController(Buggy_Motors motors): motors(motors)
+MotorController::MotorController(int8_t speed): motors(new Buggy_Motors(speed))
 {
+}
+
+MotorController::~MotorController()
+{
+    delete motors;
+}
+
+void MotorController::slower(float factor) {
+    setSpeedIntern(speed * factor);
 }
 
 void MotorController::setSpeed(uint8_t speed)
 {
     this->speed = speed;
-    motors.setSpeed(map<uint8_t>(abs(speed), 0, 100, startSpeed, 255));
+   setSpeedIntern(speed);
+}
+
+void MotorController::setSpeedIntern(uint8_t speed)
+{
+    motors->setSpeed(map<uint8_t>(abs(speed), 0, 100, startSpeed, 255));
 }
 
 void MotorController::setTargetAngle(Angle targetAngle)
@@ -29,10 +43,15 @@ void MotorController::drive(Angle targetAngle, float anglePerSecond)
     this->startAngle = currentAngle;
     setTargetAngle(targetAngle);
 
-    motors.forward();
+    motors->forward();
 
     pid.resetTime();
     delta.start();
+}
+
+void MotorController::rotateRelative(Angle targetAngle)
+{
+    rotate(currentAngle + targetAngle);
 }
 
 void MotorController::rotate(Angle targetAngle)
@@ -40,26 +59,26 @@ void MotorController::rotate(Angle targetAngle)
     state = State::ROTATING;
     setTargetAngle(targetAngle);
 
-    if (angleDifference(targetAngle, currentAngle).get() > 0)
+    if (angleDifference(targetAngle, currentAngle).get() < 0)
     {
-        motors.rotateRight();
+        motors->rotateRight();
     }
     else
     {
-        motors.rotateLeft();
+        motors->rotateLeft();
     }
 }
 
 void MotorController::brake()
 {
     state = State::STOPPED;
-    motors.brake();
+    motors->brake();
 }
 
 void MotorController::release()
 {
     state = State::STOPPED;
-    motors.release();
+    motors->release();
 }
 
 void MotorController::setCurrentAngle(Angle currentAngle)
@@ -74,7 +93,8 @@ void MotorController::correct()
         return;
     }
 
-    constexpr float epsilon = 5;
+    constexpr float nearingEpsilon = 10;
+    constexpr float epsilon = 4;
 
     float diff = abs(angleDifference(currentAngle, targetAngle).get());
 
@@ -88,21 +108,30 @@ void MotorController::correct()
         float wipTargetAngle = startAngle.get() + (angleDifference(targetAngle, startAngle).get() / anglePerSecond) * delta.getElapsedSeconds();
         float error = angleDifference(wipTargetAngle, currentAngle).get();
         float correction = pid.calculate(error) / 100.f;
-        if (angleDifference(wipTargetAngle, currentAngle).get() > 0)
+        if (angleDifference(wipTargetAngle, currentAngle).get() < 0)
         {
-            motors.forwardTurnRight(correction);
+            motors->forwardTurnRight(correction);
         }
         else
         {
-            motors.forwardTurnLeft(-correction);
+            motors->forwardTurnLeft(-correction);
         }
     }
     else if (state == State::ROTATING)
     {
-        if (diff < epsilon)
-        {
+        // FIXME: not synchronized!!
+        if (angleDifference(currentAngle, targetAngle).get() < 0) {
+            motors->rotateRight();
+        }
+        else {
+            motors->rotateLeft();
+        }
+
+        if (diff < epsilon) {
             brake();
-            return;
+        }
+        else if (diff < nearingEpsilon) {
+            slower(0);
         }
     }
 }

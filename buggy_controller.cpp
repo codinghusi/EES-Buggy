@@ -11,7 +11,7 @@
 #include "motorhatlib/motor_controller.h"
 
 Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), unsigned speed):
-    motors(MotorController(Buggy_Motors(255))) // TODO: rethink speed = 255
+    motors(speed)
 {
     // buggy_motors->sayHello();
     wiringPiSetup();
@@ -74,10 +74,10 @@ void Buggy_Controller::keyboard_control(){
             motors.drive(-90, 10);
             break;
         case 'q':
-            motors.rotate(-90); // FIXME: can't rotate beyond 90 degrees
+            motors.rotateRelative(-90);
             break;
         case 'e':
-            motors.rotate(90);
+            motors.rotateRelative(90);
             break;
 
         default:
