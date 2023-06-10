@@ -108,6 +108,10 @@ void BuggyController::keyboard_control()
             run_over();
             break;
 
+        case 'h':
+            std::cout << "say hello" << std::endl;
+            motors.motors->say_hello();
+
         case '+':
             if (motors.get_speed() + 5 <= 100) {
                 motors.set_speed(motors.get_speed() + 5);

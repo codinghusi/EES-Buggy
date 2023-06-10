@@ -5,9 +5,6 @@
 #include <thread>
 #include <iostream>
 
-//TODO denglisch beseitigen, Header Datei, Klasse
-
-
 void HCSR04::chronometry_interrupt()
 {
 
@@ -17,28 +14,35 @@ void HCSR04::chronometry_interrupt()
     }
     else {
         auto timediff = std::chrono::high_resolution_clock::now() - start;
-
         long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
 
         //SONIC_SPEED in m/s 
         distance_result = timediff_microseconds * (SONIC_SPEED / 20000.0);
         
         wait_for_echo = false;
-
     }
     
 
 }
 
-void HCSR04::config(void (*handler)()) {
+HCSR04::HCSR04(uint8_t t, uint8_t e, uint8_t bl)
+ {
+    distance_result = ULTRASONIC_RANGE;
+    wait_for_echo = false;
+    start = std::chrono::high_resolution_clock::now();
+    trigger = t;
+    echo = e;
+    brake_light = bl;
+}
+
+void HCSR04::config(void (*handler)())
+{
     pinMode(trigger, OUTPUT);
     pinMode(echo, INPUT);
     pinMode(brake_light, OUTPUT);
     //Interrupt initalisieren
     wiringPiISR(echo, INT_EDGE_BOTH, handler);
- 
 }
-
 
 void HCSR04::distance_measurement() {
     
@@ -51,7 +55,6 @@ void HCSR04::distance_measurement() {
     digitalWrite(trigger, LOW);
 
     wait_for_echo = true;
-    
 }
 
 
@@ -63,3 +66,15 @@ void HCSR04::brake_light_off() {
     digitalWrite(brake_light, LOW);
 }
 
+bool HCSR04::get_wait_for_echo()
+{
+    auto timediff = std::chrono::high_resolution_clock::now() - start;
+    long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
+
+    //SONIC_SPEED in m/s 
+    float distance = timediff_microseconds * (SONIC_SPEED / 20000.0);
+    if(distance > ULTRASONIC_RANGE)
+        wait_for_echo = false;
+
+    return wait_for_echo;
+}
