@@ -114,7 +114,7 @@ void MotorController::correct()
     }
 
     const float epsilon = ROTATION_EPSILON;
-    float diff = angleDifference(targetAngle, currentAngle).get();
+    float diff = angle_difference(targetAngle, currentAngle).get();
 
     if (state == State::FORWARD) {
         float error = abs(diff);
@@ -159,8 +159,7 @@ void MotorController::correct()
         }
         else if (abs(diff) < ROTATION_NEARING_EPSILON) {
             using namespace std::chrono_literals;
-            brake(false);
-            state = State::ROTATING;
+            motors->brake();
             std::this_thread::sleep_for(10ms);
             std::cout << "nearing" << std::endl;
         } 
