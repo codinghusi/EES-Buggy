@@ -8,12 +8,12 @@
 #include "../terminal/terminal.h"
 #include "../config.h"
 
-Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
+Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonic_handler)(), void (*gyro_handler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
 {
     wiringPiSetup();
-    ultrasonic_sensor.config(ultrasonicHandler);
+    ultrasonic_sensor.config(ultrasonic_handler);
     gyro_sensor.init();
-    gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyroHandler);
+    gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyro_handler);
 
     // --- Calibrate Gyro ---
     std::cout << std::endl;
