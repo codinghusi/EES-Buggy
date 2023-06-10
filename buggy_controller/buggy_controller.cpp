@@ -103,6 +103,20 @@ void Buggy_Controller::keyboard_control()
             slalomMotors();
             break;
 
+        case '+':
+            if (motors.getSpeed() + 5 <= 100) {
+                motors.setSpeed(motors.getSpeed() + 5);
+            }
+            std::cout << "Speed: " << (int) motors.getSpeed() << std::endl;
+            break;
+
+        case '-':
+            if (motors.getSpeed() - 5 > 0) {
+                motors.setSpeed(motors.getSpeed() - 5);
+            }
+            std::cout << "Speed: " << (int) motors.getSpeed() << std::endl;
+            break;
+
         // reset gyroscope
         case 'k':
             gyro_sensor.gyroscope.z = 0;

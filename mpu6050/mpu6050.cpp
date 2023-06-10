@@ -7,7 +7,8 @@
 
 // TODO: implement Master/Slave
 
-#define GYRO_RANGE 2000.f
+// #define GYRO_RANGE 2000.f
+#define GYRO_RANGE 250.f
 
 void MPU6050::init() {
   std::lock_guard<std::mutex> lock(mtx);
@@ -15,8 +16,8 @@ void MPU6050::init() {
   DEVICE_RESET = 1;
   sleep_for(10ms);
   SLEEP = 0;
-  // FS_SEL = 0; // 250 °/s
-  FS_SEL = 3; // 2000°/s // if you use this line: please change it also in define GYRO_RANGE
+  FS_SEL = 0; // 250 °/s
+  // FS_SEL = 3; // 2000°/s // if you use this line: please change it also in define GYRO_RANGE
 }
 
 void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {

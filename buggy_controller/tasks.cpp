@@ -67,6 +67,9 @@ void Buggy_Controller::rectangleNoGyro()
 
 void Buggy_Controller::rectangleGyro()
 {
+    // reset gyroscope
+    gyro_sensor.gyroscope.z = 0;
+    
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(1500);
     motors.forwards();
     std::this_thread::sleep_for(forwardtime);
