@@ -1,6 +1,7 @@
 #pragma once
 #include "../adafruit/motorhat/adafruitmotorhat.h"
 #include <math.h>
+#include "../../config.h"
 
 template<typename T>
 T map(T x, T in_min, T in_max, T out_min, T out_max) {
@@ -21,7 +22,7 @@ class Buggy_Motors{
     uint8_t motorspeed;
     AdafruitMotorHAT hat;
     std::shared_ptr<AdafruitDCMotor> motorLeft, motorRight;
-    uint8_t startSpeed = 50; // 80;
+    uint8_t startSpeed = MOTORS_SPEED_OFFSET;;
 
     inline void forwardLeft() { motorLeft->run(AdafruitDCMotor::kForward); }
     inline void forwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }

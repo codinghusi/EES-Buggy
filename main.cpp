@@ -9,7 +9,7 @@
 void ultrasonicHandler();
 void gyroHandler();
 
-Buggy_Controller buggy(motorLeftPort, motorRightPort, ultrasonicHandler, gyroHandler, 50);
+Buggy_Controller buggy(MOTOR_LEFT_PORT, MOTOR_RIGHT_PORT, ultrasonicHandler, gyroHandler, INITIAL_BUGGY_SPEED);
 
 void signalHandler(int signum)
 {
