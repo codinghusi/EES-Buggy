@@ -5,12 +5,6 @@
 #include "../mpu6050/mpu6050.h"
 #include "../motors/motor_controller/motor_controller.h"
 
-#define GYRO_INTERRUPT_PIN 22
-
-#define MOTORS
-#define ULTRASONIC
-#define GYRO
-
 class Buggy_Controller
 {
 private:

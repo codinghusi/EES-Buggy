@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../motors/adafruit/motorhat/adafruitmotorhat.h"
 #include "../terminal/terminal.h"
+#include "../config.h"
 
 Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
 {
@@ -19,7 +20,7 @@ Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort
     std::cout << std::endl;
     std::cout << "Calibrating gyro..." << std::endl;
     std::cout << "Please hold your breath." << std::endl;
-    while (!gyro_sensor.calibrateDrift(2s))
+    while (!gyro_sensor.calibrate_drift(2s))
     {
         std::cout << "Don't move!" << std::endl;
     }
@@ -95,12 +96,17 @@ void Buggy_Controller::keyboard_control()
             slalomMotors();
             break;
         case 'O':
-            std::cout << "Slalom with ultrasonic" << std::endl;
-            slalomMotors();
+            std::cout << "Slalom with gyrosensor" << std::endl;
+            slalomGyro();
             break;
         case 'p':
-            std::cout << "Slalom with gyrosensor" << std::endl;
-            slalomMotors();
+            std::cout << "Slalom with ultrasonic" << std::endl;
+            slalomUltrasonic();
+            break;
+
+        case 'u': 
+            std::cout << "run over" << std::endl;
+            runOver();
             break;
 
         case '+':
