@@ -19,20 +19,25 @@
 `q` - Rotate for 90 degrees (anti-clockwise)  
 `e` - Rotate for 90 degrees (clockwise)  
   
-`c` - Program: Circumnavigate without gyro  
-`C` - Program: Circumnavigate with gyro  
+`c` - Routine: Circumnavigate without gyro  
+`C` - Routine: Circumnavigate with gyro  
   
-`r` - Program: Drive in a rectangle without gyro  
-`R` - Program: Drive in a rectangle with a gyro  
+`r` - Routine: Drive in a rectangle without gyro  
+`R` - Routine: Drive in a rectangle with a gyro  
   
-`o` - Program: Drive a slalom without sensors  
-`p` - Program: Drive a slalom with ultra sonic without gyro  
-`O` - Program: Drive a slalom with gyro and ultra sonic  
+`o` - Routine: Drive a slalom without sensors  
+`p` - Routine: Drive a slalom with ultra sonic without gyro  
+`O` - Routine: Drive a slalom with gyro and ultra sonic  
   
-`u` - Program: Run over an object in front (please be careful!)  
+`u` - Routine: Run over an object in front (please be careful!)
+`h` - Routine: Say hello
 
 `k` - Resets absolute gyroscope
 `g` - Outputs the current gyroscope.z value 
 
 ## config.h
 Defines to configure your pins and speeds
+
+# Gyroscope
+Test the gyroscope with  
+`make gyro-test`

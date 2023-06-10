@@ -37,15 +37,13 @@ void setup() {
   cout << "Calibrating..." << endl
        << "Don't move!" << endl;
       
-  while (!gyro.calibrate_drift(1s)) {
+  while (!gyro.calibrate_drift(1s, 20.f)) {
     cout << "Please don't move :)" << endl;
   }
 
   cout << "OK." << endl;
 
-  gyro.gyroscope.x = 0;
-  gyro.gyroscope.y = 0;
-  gyro.gyroscope.z = 0;
+  gyro.reset_gyroscope();
 
 
   // --- End Calibrate ---
@@ -58,15 +56,22 @@ void setup() {
   // --- End Some Experiments ---
 
   system("clear");
-  cout << "calculated drift: " << gyro.drift << endl;
+  cout << "calculated drift: " << gyro.get_drift() << ", error: " << gyro.get_drift().abs() << endl;
 
 }
 
 void loop() {
   cout << '\r';
-  cout << (int) gyro.gyroscope.x << "   ";
-  cout << (int) gyro.gyroscope.y << "   ";
-  cout << (int) gyro.gyroscope.z << "   ";
+  cout << (int) gyro.get_gyroscope().x << "   ";
+  cout << (int) gyro.get_gyroscope().y << "   ";
+  cout << (int) gyro.get_gyroscope().z << "   ";
   cout.flush();
   sleep_for(100ms);
+}
+
+int main() {
+  setup();
+  while (true) {
+    loop();
+  }
 }

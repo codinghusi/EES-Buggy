@@ -29,6 +29,7 @@ public:
 
   void standby_except_gyro_z();
   Vec3<float> get_gyroscope() const;
+  Vec3<float> get_drift() const;
   void reset_gyroscope();
 
   Byte SELF_TEST_X;

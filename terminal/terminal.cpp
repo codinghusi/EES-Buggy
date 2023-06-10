@@ -4,6 +4,8 @@
 #include <unistd.h>
 struct termios orig_termios;
 
+// Source: https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html
+ 
 void disable_raw_mode()
 {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);

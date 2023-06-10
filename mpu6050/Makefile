@@ -1,12 +1,11 @@
 CC = g++
 CFLAGS = -g -lwiringPi -pthread
-OBJ_NAME = main
+OBJ_NAME = test-main
 
 OBJ_DIR = ./obj
-EXCLUDE = test-main.cpp
 
 
-CPP_FILES = $(filter-out %$(EXCLUDE), $(shell find . -name '*.cpp'))
+CPP_FILES = $(shell find . -name '*.cpp')
 HPP_FILES = $(shell find . -name '*.hpp')
 H_FILES = $(shell find . -name '*.h')
 OBJ_FILES = $(patsubst ./%.cpp, $(OBJ_DIR)/%.o, $(CPP_FILES))
@@ -44,6 +43,3 @@ run:
 shit:
 	make
 	make run
-
-gyro-test:
-	make shit -C mpu6050

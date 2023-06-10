@@ -66,7 +66,7 @@ void HCSR04::brake_light_off() {
     digitalWrite(brake_light, LOW);
 }
 
-bool HCSR04::get_wait_for_echo()
+bool HCSR04::is_waiting_for_echo()
 {
     auto timediff = std::chrono::high_resolution_clock::now() - start;
     long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();

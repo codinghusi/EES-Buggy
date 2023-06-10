@@ -33,5 +33,5 @@ public:
 		return start;
 	}
 
-	bool get_wait_for_echo();
+	bool is_waiting_for_echo();
 };

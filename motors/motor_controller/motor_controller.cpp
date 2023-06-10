@@ -48,13 +48,11 @@ void MotorController::drive()
 void MotorController::forwards()
 {
     driving_forward = true;
-    motors->forward();
 }
 
 void MotorController::backwards()
 {
     driving_forward = false;
-    motors->backward();
 }
 
 void MotorController::drive_relative(Angle target_angle)
@@ -69,6 +67,14 @@ void MotorController::drive(Angle target_angle)
     state = State::FORWARD;
     this->start_angle = current_angle;
     set_target_angle(target_angle);
+    if (driving_forward)
+    {
+        motors->forward();
+    }
+    else
+    {
+        motors->backward();
+    }
 }
 
 void MotorController::rotate_relative(Angle target_angle)
@@ -86,18 +92,36 @@ void MotorController::rotate(Angle target_angle)
 
 void MotorController::brake(bool doLock)
 {
+    using namespace std::this_thread;
+    using namespace std::chrono_literals;
     if (doLock)
     {
         std::unique_lock<std::mutex> lock(motor_mtx);
     }
     state = State::STOPPED;
     motors->brake();
+    sleep_for(20ms);
 }
 
 void MotorController::release()
 {
     brake();
     motors->release();
+}
+
+void MotorController::wait_for_rotation()
+{
+    using namespace std::this_thread;
+    using namespace std::chrono_literals;
+    while (get_state() == State::ROTATING)
+    {
+        sleep_for(10ms);
+    }
+}
+
+float MotorController::error_to_target_angle()
+{
+    return angle_difference(target_angle, current_angle).get();
 }
 
 void MotorController::set_current_angle(Angle current_angle)
@@ -115,7 +139,7 @@ void MotorController::correct()
     }
 
     const float epsilon = ROTATION_EPSILON;
-    float diff = angle_difference(target_angle, current_angle).get();
+    float diff = error_to_target_angle();
 
     if (state == State::FORWARD)
     {

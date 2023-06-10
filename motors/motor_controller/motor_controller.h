@@ -48,6 +48,10 @@ public:
     void release();
     State get_state() { return state; }
 
+    void wait_for_rotation();
+
+    float error_to_target_angle();
+
     // call periodically
     void set_current_angle(Angle currentAngle);
 

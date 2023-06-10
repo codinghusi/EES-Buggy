@@ -5,14 +5,14 @@
 #include <chrono>
 #include <iostream>
 #include "../config.h"
-
+ 
 // TODO: implement Master/Slave
 
 void MPU6050::init() {
   std::lock_guard<std::mutex> lock(mtx);
 
   DEVICE_RESET = 1;
-  sleep_for(10ms);
+  sleep_for(10ms); 
   SLEEP = 0;
   FS_SEL = GYRO_FS_SEL;
   AFS_SEL = ACCEL_AFS_SEL;
@@ -57,7 +57,12 @@ void MPU6050::standby_except_gyro_z()
 
 Vec3<float> MPU6050::get_gyroscope() const
 {
-  return gyroscope;
+  return *const_cast<Vec3<float>*>(&gyroscope);
+}
+
+Vec3<float> MPU6050::get_drift() const
+{
+  return drift;
 }
 
 void MPU6050::reset_gyroscope()

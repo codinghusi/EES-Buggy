@@ -2,6 +2,11 @@
 
 #include <cmath>
 
+
+/**
+ * Wraps an angle value to be between -360 and 360 degrees.
+ * Can perform simple operations on angles.
+*/
 class Angle{
     float value;
 public:

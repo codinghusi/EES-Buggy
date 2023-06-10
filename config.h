@@ -4,7 +4,7 @@
 #define INITIAL_BUGGY_SPEED         25
 #define MOTORS_SPEED_OFFSET         50
 
-#define ROTATION_EPSILON            0.5
+#define ROTATION_EPSILON            1
 #define ROTATION_SPEED              20
 #define ROTATION_NEARING_EPSILON    10
 
@@ -18,15 +18,18 @@
 
 // Für den Gyro
 #define GYRO_INTERRUPT_PIN          GPIO_PIN_NO_6
+#define GYRO_CALIBRATION_ERROR      2.f
 
-#define GYRO_RANGE                  2000.f // 2000 deg/s
-#define GYRO_FS_SEL                 3
+// default:
+// #define GYRO_RANGE 250.f            // 250 deg/s
+// #define GYRO_FS_SEL 0               // 0 = +/- 250 deg/s
+// custom:
+#define GYRO_RANGE 250.f            // 250 deg/s
+#define GYRO_FS_SEL                 3  // 3 = +/- 2000 deg/sR
 #define ACCEL_RANGE                 2.f // 2g
 #define ACCEL_AFS_SEL               0
 
-// default:
-// GYRO_RANGE 250.f
-// GYRO_FS_SEL 0
+
 
 //motorhead pins in wiringpi
 #define GPIO_PIN_NO_0  				30

@@ -5,6 +5,14 @@
 #include "../mpu6050/mpu6050.h"
 #include "../motors/motor_controller/motor_controller.h"
 
+/**
+ * Takes control over the buggy
+ * Keyfeatures:
+ *  - Keyboard control
+ *  - Collision prevention (ultrasonic sensor)
+ *  - Stabilization (gyro sensor)
+ *  - Routines
+ */
 class BuggyController
 {
 private:
@@ -17,13 +25,20 @@ private:
     bool circumnavigate_right = true;
 
 public:
-    BuggyController(uint8_t motor_left_port, uint8_t motor_right_port, void (*ultrasonic_handler)(), void (*gyro_handler)(), int8_t speed);
+    BuggyController(
+        uint8_t motor_left_port,
+        uint8_t motor_right_port,
+        void (*ultrasonic_handler)(),
+        void (*gyro_handler)(),
+        int8_t speed);
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();
     void gyro_handling();
     void gyro_control();
     void release();
+
+    void wait_for_collision();
 
     void run_over();
 
