@@ -38,6 +38,29 @@ void Buggy_Controller::circumnavigateGyro()
 {
     using namespace std::chrono_literals;
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(1000);
+    std::chrono::milliseconds dodgetime = std::chrono::milliseconds(2000);
+    uint8_t angle = circumnavigate_right ? 90 : -90;
+    motors.rotateRelative(angle);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
+    motors.forwards();
+    motors.drive();
+    std::this_thread::sleep_for(dodgetime);
+    motors.rotateRelative(-angle);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
+    motors.forwards();
+    motors.drive();
+    std::this_thread::sleep_for(forwardtime);
+    motors.rotateRelative(-angle);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
+    motors.forwards();
+    motors.drive();
+    std::this_thread::sleep_for(dodgetime);
+    motors.rotateRelative(angle);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
     circumnavigate_right = !circumnavigate_right;
 }
 
@@ -109,7 +132,7 @@ void Buggy_Controller::slalomMotors()
     circumnavigateNoGyro();
 }
 
-void Buggy_Controller::slalomGyro()
+void Buggy_Controller::slalomUltrasonic()
 {
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
@@ -118,10 +141,24 @@ void Buggy_Controller::slalomGyro()
     motors.motors->forward();
     while (!prevent_forward)
         ;
-    circumnavigateGyro();
+    circumnavigateNoGyro();
     motors.motors->setSpeedLeft(leftspeed);
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
+    while (!prevent_forward)
+        ;
+    circumnavigateNoGyro();
+}
+
+void Buggy_Controller::slalomGyro()
+{
+    motors.forwards();
+    motors.drive();
+    while (!prevent_forward)
+        ;
+    circumnavigateGyro();
+    motors->forward();
+    motors.drive();
     while (!prevent_forward)
         ;
     circumnavigateGyro();
