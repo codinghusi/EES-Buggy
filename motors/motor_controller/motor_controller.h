@@ -26,7 +26,7 @@ private:
     State prevState = State::STOPPED;
 
 public:
-    Buggy_Motors *motors;
+    BuggyMotors *motors;
 
     MotorController(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed);
     ~MotorController();

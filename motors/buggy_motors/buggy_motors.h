@@ -8,7 +8,7 @@ T map(T x, T in_min, T in_max, T out_min, T out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-class Buggy_Motors
+class BuggyMotors
 {
   float turnfactor;
   uint8_t motorspeed;
@@ -26,8 +26,8 @@ class Buggy_Motors
   inline float map_speed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, start_speed, 255); }
 
   public:
-  Buggy_Motors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed = 100, float turnfactor = 0.9);
-  ~Buggy_Motors();
+  BuggyMotors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed = 100, float turnfactor = 0.9);
+  ~BuggyMotors();
   void say_hello();
   void set_speed_left(int8_t motorspeed);
   void set_speed_right(int8_t motorspeed);

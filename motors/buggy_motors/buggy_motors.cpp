@@ -2,7 +2,7 @@
 #include <chrono>
 #include "buggy_motors.h"
 
-Buggy_Motors::Buggy_Motors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed, float turnfactor)
+BuggyMotors::BuggyMotors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed, float turnfactor)
 {
     motor_left = hat.getMotor(motor_left_port);
     motor_right = hat.getMotor(motor_right_port);
@@ -10,12 +10,12 @@ Buggy_Motors::Buggy_Motors(uint8_t motor_left_port, uint8_t motor_right_port, ui
     set_turnfactor(turnfactor);
 }
 
-Buggy_Motors::~Buggy_Motors()
+BuggyMotors::~BuggyMotors()
 {
     release();
 }
 
-void Buggy_Motors::say_hello()
+void BuggyMotors::say_hello()
 {
     using namespace std::chrono_literals;
     set_speed(motorspeed);
@@ -28,119 +28,119 @@ void Buggy_Motors::say_hello()
     brake();
 }
 
-void Buggy_Motors::set_speed_left(int8_t speed)
+void BuggyMotors::set_speed_left(int8_t speed)
 {
     if (speed == 0) {
         brake_left();
         return;
     }
-    motor_left->set_speed(map_speed(speed));
+    motor_left->setSpeed(map_speed(speed));
 }
 
-void Buggy_Motors::set_speed_right(int8_t speed)
+void BuggyMotors::set_speed_right(int8_t speed)
 {
     if (speed == 0) {
         brake_right();
         return;
     }
-    motor_right->set_speed(map_speed(speed));
+    motor_right->setSpeed(map_speed(speed));
 }
 
-void Buggy_Motors::set_speed(int8_t speed)
+void BuggyMotors::set_speed(int8_t speed)
 {
     motorspeed = speed;
     set_speed_left(speed);
     set_speed_right(speed);
 }
 
-void Buggy_Motors::set_turnfactor(float turnfactor)
+void BuggyMotors::set_turnfactor(float turnfactor)
 {
     this->turnfactor = turnfactor;
 }
 
-void Buggy_Motors::forward()
+void BuggyMotors::forward()
 {
     set_speed(motorspeed);
     forward_left();
     forward_right();
 }
 
-void Buggy_Motors::backward()
+void BuggyMotors::backward()
 {
     set_speed(motorspeed);
     backward_left();
     backward_right();
 }
 
-void Buggy_Motors::brake()
+void BuggyMotors::brake()
 {
     brake_left();
     brake_right();
 }
 
-void Buggy_Motors::rotate_left()
+void BuggyMotors::rotate_left()
 {
     set_speed(motorspeed);
     backward_left();
     forward_right();
 }
 
-void Buggy_Motors::rotate_right()
+void BuggyMotors::rotate_right()
 {
     set_speed(motorspeed);
     forward_left();
     backward_right();
 }
 
-void Buggy_Motors::forward_turn_left()
+void BuggyMotors::forward_turn_left()
 {
     forward_turn_left(turnfactor);
 }
 
-void Buggy_Motors::forward_turn_left(float turnfactor)
+void BuggyMotors::forward_turn_left(float turnfactor)
 {
     set_speed_right(motorspeed);
     set_speed_left(int(motorspeed * turnfactor));
     forward();
 }
 
-void Buggy_Motors::forward_turn_right()
+void BuggyMotors::forward_turn_right()
 {
     forward_turn_right(turnfactor);
 }
 
-void Buggy_Motors::forward_turn_right(float turnfactor)
+void BuggyMotors::forward_turn_right(float turnfactor)
 {
     set_speed_right(int(motorspeed * turnfactor));
     set_speed_left(motorspeed);
     forward();
 }
 
-void Buggy_Motors::backward_turn_left()
+void BuggyMotors::backward_turn_left()
 {
     backward_turn_left(turnfactor);
 }
 
-void Buggy_Motors::backward_turn_left(float turnfactor)
+void BuggyMotors::backward_turn_left(float turnfactor)
 {
     set_speed_right(motorspeed);
     set_speed_left(int(motorspeed * turnfactor));
     backward();
 }
 
-void Buggy_Motors::backward_turn_right()
+void BuggyMotors::backward_turn_right()
 {
     backward_turn_right(turnfactor);
 }
 
-void Buggy_Motors::backward_turn_right(float turnfactor)
+void BuggyMotors::backward_turn_right(float turnfactor)
 {
     set_speed_right(int(motorspeed * turnfactor));
     set_speed_left(motorspeed);
     backward();
 }
 
-void Buggy_Motors::release()
+void BuggyMotors::release()
 {
     motor_left->run(AdafruitDCMotor::kRelease);
     motor_right->run(AdafruitDCMotor::kRelease);
