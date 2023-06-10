@@ -33,18 +33,18 @@ void HCSR04::chronometryInterrupt()
 void HCSR04::config(void (*handler)()) {
     pinMode(trigger, OUTPUT);
     pinMode(echo, INPUT);
-    pinMode(bremslicht, OUTPUT);
+    pinMode(brake_light, OUTPUT);
     //Interrupt initalisieren
     wiringPiISR(echo, INT_EDGE_BOTH, handler);
 
 }
 
 
-void HCSR04::distance_messung() {
+void HCSR04::distance_measurement() {
     
     //für 10 Microsekunden HighLevel an Trigger um signal auszulesen
-    //digitalWrite(trigger,LOW);
-    //std::this_thread::sleep_for(std::chrono::microseconds(2));
+    digitalWrite(trigger,LOW);
+    std::this_thread::sleep_for(std::chrono::microseconds(2));
     digitalWrite(trigger,HIGH);
     std::this_thread::sleep_for(std::chrono::microseconds(10));
     digitalWrite(trigger, LOW);
@@ -56,20 +56,11 @@ void HCSR04::distance_messung() {
 }
 
 
-
-void HCSR04::notbremsung() {
-    //Anhalteweg = Reaktionszeit + Bremsweg
-    //Reaktionszeit beim Menschen = Geschwindigkeit[km/h]*0,3
-    //Bremsweg  = Geschwindigkeit[km/h]*0,1*Geschwindigkeit[km/h]*0,1
-    //Notbremsung halbiert den Bremsweg
-
-}
-
-void HCSR04::bremslicht_ein() {
+void HCSR04::brake_light_on() {
     digitalWrite(bremslicht, HIGH);
 }
 
-void HCSR04::bremslicht_aus() {
+void HCSR04::brake_light_off() {
     digitalWrite(bremslicht, LOW);
 }
 
