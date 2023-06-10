@@ -5,8 +5,8 @@
 #include "../buggy_motors/buggy_motors.h"
 #include <mutex>
 
-
-class MotorController {
+class MotorController
+{
 public:
     enum class State {
         STOPPED,
@@ -16,40 +16,40 @@ public:
 
 private:
     uint8_t speed;
-    bool drivingForward = true;
-    
-    Angle startAngle = 0.f;
-    Angle targetAngle = 0.f;
-    Angle currentAngle = 0.f;
-    std::mutex motorMtx;
+    bool driving_forward = true;
+
+    Angle start_angle = 0.f;
+    Angle target_angle = 0.f;
+    Angle current_angle = 0.f;
+    std::mutex motor_mtx;
     State state = State::STOPPED;
-    State prevState = State::STOPPED;
+    State prev_state = State::STOPPED;
 
 public:
     Buggy_Motors *motors;
 
-    MotorController(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed);
+    MotorController(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed);
     ~MotorController();
 
-    void setSpeed(uint8_t speed);
+    void set_speed(uint8_t speed);
     void slower(float factor);
-    void setTemporarySpeed(float speed);
-    void resetTemporarySpeed();
-    uint8_t getSpeed() { return speed; }
-    void setTargetAngle(Angle targetAngle);
+    void set_temporary_speed(float speed);
+    void reset_temporary_speed();
+    uint8_t get_speed() { return speed; }
+    void set_target_angle(Angle target_angle);
     void forwards();
     void backwards();
     void drive();
-    void driveRelative(Angle targetAngle);
-    void drive(Angle targetAngle);
-    void rotate(Angle targetAngle);
-    void rotateRelative(Angle targetAngle);
+    void drive_relative(Angle target_angle);
+    void drive(Angle target_angle);
+    void rotate(Angle target_angle);
+    void rotate_relative(Angle target_angle);
     void brake(bool doLock = true);
     void release();
-    State getState() { return state; }
+    State get_state() { return state; }
 
     // call periodically
-    void setCurrentAngle(Angle currentAngle);
+    void set_current_angle(Angle currentAngle);
 
     // call periodically
     void correct();
