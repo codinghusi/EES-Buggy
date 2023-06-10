@@ -10,16 +10,23 @@
 
 void HCSR04::chronometryInterrupt()
 {
-   
-    auto timediff = std::chrono::high_resolution_clock::now() - start;
 
-    long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
+    if (digitalRead(echo))
+    {
+        start = std::chrono::high_resolution_clock::now();
+    }
+    else {
+        auto timediff = std::chrono::high_resolution_clock::now() - start;
 
-    //std::cout << "Zeitdifferenz:" << timediff_microseconds << std::endl;
+        long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
 
-    distance_result = timediff_microseconds  * (34320. / 2000000.0) - 40.;
-    wait_for_echo = false;
+        //std::cout << "Zeitdifferenz:" << timediff_microseconds << std::endl;
 
+        distance_result = timediff_microseconds * (34320. / 2000000.0);
+        wait_for_echo = false;
+
+    }
+    
 
 }
 
@@ -27,8 +34,8 @@ void HCSR04::config(void (*handler)()) {
     pinMode(trigger, OUTPUT);
     pinMode(echo, INPUT);
     pinMode(bremslicht, OUTPUT);
-    //Interrupt fuer den Interrupt initalisieren
-    wiringPiISR(echo, INT_EDGE_FALLING, handler);
+    //Interrupt initalisieren
+    wiringPiISR(echo, INT_EDGE_BOTH, handler);
 
 }
 
@@ -42,7 +49,7 @@ void HCSR04::distance_messung() {
     std::this_thread::sleep_for(std::chrono::microseconds(10));
     digitalWrite(trigger, LOW);
 
-    start = std::chrono::high_resolution_clock::now();
+    
     //std::cout << "Startwert:"<<std::chrono::duration_cast<std::chrono::microseconds>(start).count() << std::endl;
     wait_for_echo = true;
     
