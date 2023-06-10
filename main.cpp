@@ -15,7 +15,7 @@ void signalHandler(int signum)
 {
     std::cout << "Strg-C Programmende" << std::endl;
     buggy.release();
-	disableRawMode();
+	disable_raw_mode();
     exit(signum);
 }
 

@@ -36,7 +36,7 @@ void Buggy_Controller::release(){
 
 void Buggy_Controller::keyboard_control()
 {
-    enableRawMode();
+    enable_raw_mode();
     char c;
     while (read(STDIN_FILENO, &c, 1) == 1)
     {
@@ -137,7 +137,7 @@ void Buggy_Controller::keyboard_control()
             break;
         }
     }
-    disableRawMode();
+    disable_raw_mode();
 }
 
 void Buggy_Controller::ultrasonic_control()
