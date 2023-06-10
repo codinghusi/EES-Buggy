@@ -36,7 +36,7 @@ void HCSR04::config(void (*handler)()) {
     pinMode(brake_light, OUTPUT);
     //Interrupt initalisieren
     wiringPiISR(echo, INT_EDGE_BOTH, handler);
-
+ 
 }
 
 
@@ -57,10 +57,10 @@ void HCSR04::distance_measurement() {
 
 
 void HCSR04::brake_light_on() {
-    digitalWrite(bremslicht, HIGH);
+    digitalWrite(brake_light, HIGH);
 }
 
 void HCSR04::brake_light_off() {
-    digitalWrite(bremslicht, LOW);
+    digitalWrite(brake_light, LOW);
 }
 

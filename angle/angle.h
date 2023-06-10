@@ -17,4 +17,4 @@ public:
     Angle& operator=(const float& angle);
 };
 
-Angle angleDifference(Angle a, Angle b);
+Angle angle_difference(Angle a, Angle b);

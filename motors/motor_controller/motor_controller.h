@@ -33,6 +33,8 @@ public:
 
     void setSpeed(uint8_t speed);
     void slower(float factor);
+    void setTemporarySpeed(float speed);
+    void resetTemporarySpeed();
     uint8_t getSpeed() { return speed; }
     void setTargetAngle(Angle targetAngle);
     void forwards();

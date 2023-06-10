@@ -26,7 +26,7 @@ Angle &Angle::operator=(const float &angle)
     return *this;
 }
 
-Angle angleDifference(Angle a, Angle b)
+Angle angle_difference(Angle a, Angle b)
 {
     Angle diff = a - b;
     if (diff.get() > 180.f)

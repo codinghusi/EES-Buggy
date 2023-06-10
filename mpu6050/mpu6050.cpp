@@ -4,10 +4,9 @@
 #include <math.h>
 #include <chrono>
 #include <iostream>
+#include "../config.h"
 
 // TODO: implement Master/Slave
-
-#define GYRO_RANGE 2000.f
 
 void MPU6050::init() {
   std::lock_guard<std::mutex> lock(mtx);
@@ -15,8 +14,7 @@ void MPU6050::init() {
   DEVICE_RESET = 1;
   sleep_for(10ms);
   SLEEP = 0;
-  // FS_SEL = 0; // 250 °/s
-  FS_SEL = 3; // 2000°/s // if you use this line: please change it also in define GYRO_RANGE
+  FS_SEL = GYRO_FS_SEL;
 }
 
 void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
@@ -30,12 +28,12 @@ void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
   pinMode(pinNumber, INPUT);
   pullUpDnControl(pinNumber, PUD_DOWN);
   wiringPiISR(pinNumber, INT_EDGE_RISING, handler);
-  lastMeasurement = std::chrono::steady_clock::now();
+  last_measurement = std::chrono::steady_clock::now();
   sleep_for(50ms);
-  clearInterruptFlag();
+  clear_interrupt_flag();
 }
 
-bool MPU6050::calibrateDrift(const std::chrono::duration<float>& duration, const float maxError) {
+bool MPU6050::calibrate_drift(const std::chrono::duration<float>& duration, const float maxError) {
   Vec3<float> before = {gyroscope.x, gyroscope.y, gyroscope.z};
   sleep_for(duration);
   Vec3<float> after = {gyroscope.x, gyroscope.y, gyroscope.z};
@@ -47,14 +45,14 @@ bool MPU6050::calibrateDrift(const std::chrono::duration<float>& duration, const
   return true;
 }
 
-float MPU6050::convertRawGyroscopeValue(float oldValue, float value, float drift, float delta) {
+float MPU6050::convert_raw_gyroscope_value(float oldValue, float value, float drift, float delta) {
   constexpr float alpha = 0.98f;
   constexpr float beta = 1.f - alpha;
   const float mult = delta * (GYRO_RANGE / 32768.f);
   return fmod(alpha * (oldValue + value * mult - drift * delta) + beta * oldValue, 360.f);
 }
 
-float MPU6050::convertRawAccelerometerValue(float value, float delta) {
+float MPU6050::convert_raw_accelerometer_value(float value, float delta) {
   constexpr float mult = 2.f / 32768.f;
   return value * mult * delta;
 }
@@ -63,27 +61,24 @@ float MPU6050::convertRawAccelerometerValue(float value, float delta) {
 void MPU6050::interruptTriggered() {
   std::lock_guard<std::mutex> lock(mtx);
   auto now = std::chrono::steady_clock::now();
-  std::chrono::duration<float> duration = now - lastMeasurement;
-  lastMeasurement = now;
+  std::chrono::duration<float> duration = now - last_measurement;
+  last_measurement = now;
   
   Vec3<int16_t> gyro = { GYRO_X, GYRO_Y, GYRO_Z };
   Vec3<int16_t> accel = { ACCEL_X, ACCEL_Y, ACCEL_Z };
 
   float delta = duration.count();
-  gyroscope.x = convertRawGyroscopeValue(gyroscope.x, gyro.x, drift.x, delta);
-  gyroscope.y = convertRawGyroscopeValue(gyroscope.y, gyro.y, drift.y, delta);
-  gyroscope.z = convertRawGyroscopeValue(gyroscope.z, gyro.z, drift.z, delta);
+  gyroscope.x = convert_raw_gyroscope_value(gyroscope.x, gyro.x, drift.x, delta);
+  gyroscope.y = convert_raw_gyroscope_value(gyroscope.y, gyro.y, drift.y, delta);
+  gyroscope.z = convert_raw_gyroscope_value(gyroscope.z, gyro.z, drift.z, delta);
   // TODO: remove gravity from accelerometer
-  accelerometer.x = convertRawAccelerometerValue(accel.x, delta);
-  accelerometer.y = convertRawAccelerometerValue(accel.y, delta);
-  accelerometer.z = convertRawAccelerometerValue(accel.z, delta);
-  position.x += accelerometer.x;
-  position.y += accelerometer.y;
-  position.z += accelerometer.z;
-  clearInterruptFlag();
+  accelerometer.x = convert_raw_accelerometer_value(accel.x, delta);
+  accelerometer.y = convert_raw_accelerometer_value(accel.y, delta);
+  accelerometer.z = convert_raw_accelerometer_value(accel.z, delta);
+  clear_interrupt_flag();
 }
 
-void MPU6050::clearInterruptFlag() {
+void MPU6050::clear_interrupt_flag() {
   (uint8_t) INT_STATUS;
 }
 
