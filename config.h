@@ -1,22 +1,26 @@
-#define MOTOR_LEFT_PORT 1
-#define MOTOR_RIGHT_PORT 4
+#define MOTOR_LEFT_PORT             1
+#define MOTOR_RIGHT_PORT            4
 
-#define INITIAL_BUGGY_SPEED 25
-#define MOTORS_SPEED_OFFSET 50
+#define INITIAL_BUGGY_SPEED         25
+#define MOTORS_SPEED_OFFSET         50
 
-#define ROTATION_EPSILON 0.5
-#define ROTATION_SPEED 20
-#define ROTATION_NEARING_EPSILON 10
+#define ROTATION_EPSILON            0.5
+#define ROTATION_SPEED              20
+#define ROTATION_NEARING_EPSILON    10
 
 
 //defines f�r den Ultraschall
-#define sonic_speed 343.20
+#define SONIC_SPEED                 343.20
+#define ULTRASONIC_RANGE            400
+#define ECHO                        GPIO_PIN_NO_22
+#define TRIGGER                     GPIO_PIN_NO_23
+#define BRAKE_LIGHT                 GPIO_PIN_NO_24
 
 // Für den Gyro
-#define GYRO_INTERRUPT_PIN GPIO_PIN_NO_6
+#define GYRO_INTERRUPT_PIN          GPIO_PIN_NO_6
 
-#define GYRO_RANGE 2000.f // 2000 deg/s
-#define GYRO_FS_SEL 3
+#define GYRO_RANGE                  2000.f // 2000 deg/s
+#define GYRO_FS_SEL                 3
 
 // default:
 // GYRO_RANGE 250.f
