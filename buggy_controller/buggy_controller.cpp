@@ -7,10 +7,7 @@
 #include "../motors/adafruit/motorhat/adafruitmotorhat.h"
 #include "../terminal/terminal.h"
 
-
-
-Buggy_Controller::Buggy_Controller(void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed):
-    motors(speed)
+Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
 {
     // buggy_motors->sayHello();
     wiringPiSetup();

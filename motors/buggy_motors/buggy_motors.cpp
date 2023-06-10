@@ -2,10 +2,10 @@
 #include <chrono>
 #include "buggy_motors.h"
 
-Buggy_Motors::Buggy_Motors(uint8_t speed, float turnfactor)
+Buggy_Motors::Buggy_Motors(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed, float turnfactor)
 {
-    motorLeft = hat.getMotor(1);
-    motorRight = hat.getMotor(4);
+    motorLeft = hat.getMotor(motorLeftPort);
+    motorRight = hat.getMotor(motorRightPort);
     setSpeed(speed);
     setTurnfactor(turnfactor);
 }
