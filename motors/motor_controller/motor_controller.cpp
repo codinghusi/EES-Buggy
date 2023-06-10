@@ -1,7 +1,7 @@
 #include "motor_controller.h"
 #include <iostream>
 
-MotorController::MotorController(uint8_t speed): motors(new Buggy_Motors(speed))
+MotorController::MotorController(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed): motors(new Buggy_Motors(motorLeftPort, motorRightPort, speed))
 {
     setSpeed(speed);
 }
@@ -59,7 +59,7 @@ void MotorController::drive(Angle targetAngle)
 
 void MotorController::rotateRelative(Angle targetAngle)
 {
-    rotate(currentAngle + targetAngle);
+    rotate(currentAngle - targetAngle); // subtracting because it goes anti clockwise (against intuition)
 }
 
 void MotorController::rotate(Angle targetAngle)

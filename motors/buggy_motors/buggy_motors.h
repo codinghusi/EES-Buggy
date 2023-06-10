@@ -25,14 +25,16 @@ class Buggy_Motors{
 
     inline void forwardLeft() { motorLeft->run(AdafruitDCMotor::kForward); }
     inline void forwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }
+    // inline void forwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
     inline void backwardLeft() { motorLeft->run(AdafruitDCMotor::kBackward); }
     inline void backwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
+    // inline void backwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }
     inline void brakeLeft() { motorLeft->run(AdafruitDCMotor::kBrake); }
     inline void brakeRight() { motorRight->run(AdafruitDCMotor::kBrake); }
     inline float mapSpeed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, startSpeed, 255); }
 
 public:
-    Buggy_Motors(uint8_t speed = 100, float turnfactor = 0.9);
+    Buggy_Motors(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed = 100, float turnfactor = 0.9);
     ~Buggy_Motors();
     void sayHello();
     void setSpeedLeft(int8_t motorspeed);

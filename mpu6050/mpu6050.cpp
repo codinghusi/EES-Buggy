@@ -24,8 +24,7 @@ void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
 
   INT_LEVEL = 0; // Active HIGH
   INT_OPEN = 0; // Push Pull
-  // LATCH_INT_EN = 1; // 'Pending Register' doesn't clear itself
-  LATCH_INT_EN = 0;
+  LATCH_INT_EN = 0; // 50us long pulse on interrupt
   INT_RD_CLEAR = 0; // Pending Register only cleared when reading INT_STATUS
   DATA_RDY_EN = 1; // Trigger interrupt when new sensor data is ready
   pinMode(pinNumber, INPUT);
@@ -57,12 +56,8 @@ float MPU6050::convertRawGyroscopeValue(float oldValue, float value, float drift
 
 float MPU6050::convertRawAccelerometerValue(float value, float delta) {
   constexpr float mult = 2.f / 32768.f;
-  // cout << "calc: " << value * mult * delta << endl;
   return value * mult * delta;
 }
-
-
-
 
 
 void MPU6050::interruptTriggered() {
@@ -78,6 +73,7 @@ void MPU6050::interruptTriggered() {
   gyroscope.x = convertRawGyroscopeValue(gyroscope.x, gyro.x, drift.x, delta);
   gyroscope.y = convertRawGyroscopeValue(gyroscope.y, gyro.y, drift.y, delta);
   gyroscope.z = convertRawGyroscopeValue(gyroscope.z, gyro.z, drift.z, delta);
+  // TODO: remove gravity from accelerometer
   accelerometer.x = convertRawAccelerometerValue(accel.x, delta);
   accelerometer.y = convertRawAccelerometerValue(accel.y, delta);
   accelerometer.z = convertRawAccelerometerValue(accel.z, delta);

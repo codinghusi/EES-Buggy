@@ -75,13 +75,32 @@ void Buggy_Controller::keyboard_control()
             motors.rotateRelative(90);
             break;
         case 'c':
-            circumnavigate();
+            std::cout << "Circumnavigate no gyro" << std::endl;
+            circumnavigateNoGyro();
+            break;
+        case 'C':
+            std::cout << "Circumnavigate with gyro" << std::endl;
+            circumnavigateGyro();
             break;
         case 'r':
-            rectangle();
+            std::cout << "Rectangle no gyro" << std::endl;
+            rectangleNoGyro();
+            break;
+        case 'R':
+            std::cout << "Rectangle with gyro" << std::endl;
+            rectangleGyro();
             break;
         case 'o':
-            slalom();
+            std::cout << "Slalom vanilla" << std::endl;
+            slalomMotors();
+            break;
+        case 'O':
+            std::cout << "Slalom with ultrasonic" << std::endl;
+            slalomMotors();
+            break;
+        case 'p':
+            std::cout << "Slalom with gyrosensor" << std::endl;
+            slalomMotors();
             break;
 
         // reset gyroscope

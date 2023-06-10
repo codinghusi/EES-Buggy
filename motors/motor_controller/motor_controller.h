@@ -28,7 +28,7 @@ private:
 public:
     Buggy_Motors *motors;
 
-    MotorController(uint8_t speed);
+    MotorController(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed);
     ~MotorController();
 
     void setSpeed(uint8_t speed);

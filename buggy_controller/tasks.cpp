@@ -98,12 +98,12 @@ void Buggy_Controller::slalomMotors()
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(200ms);
-    circumnavigate();
+    circumnavigateNoGyro();
     motors.motors->setSpeedLeft(leftspeed);
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(5000ms);
-    circumnavigate();
+    circumnavigateNoGyro();
 }
 
 void Buggy_Controller::slalomGyro()
@@ -115,11 +115,11 @@ void Buggy_Controller::slalomGyro()
     motors.motors->forward();
     while (!prevent_forward)
         ;
-    circumnavigate();
+    circumnavigateGyro();
     motors.motors->setSpeedLeft(leftspeed);
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     while (!prevent_forward)
         ;
-    circumnavigate();
+    circumnavigateGyro();
 }
