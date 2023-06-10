@@ -17,7 +17,7 @@ void MPU6050::init() {
   FS_SEL = GYRO_FS_SEL;
 }
 
-void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
+void MPU6050::setup_interrupt(uint8_t pinNumber, void (*handler)()) {
   std::lock_guard<std::mutex> lock(mtx);
 
   INT_LEVEL = 0; // Active HIGH
@@ -58,7 +58,7 @@ float MPU6050::convert_raw_accelerometer_value(float value, float delta) {
 }
 
 
-void MPU6050::interruptTriggered() {
+void MPU6050::interrupt_triggered() {
   std::lock_guard<std::mutex> lock(mtx);
   auto now = std::chrono::steady_clock::now();
   std::chrono::duration<float> duration = now - last_measurement;

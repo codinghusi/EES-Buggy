@@ -13,7 +13,7 @@ BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_po
     wiringPiSetup();
     ultrasonic_sensor.config(ultrasonic_handler);
     gyro_sensor.init();
-    gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyro_handler);
+    gyro_sensor.setup_interrupt(GYRO_INTERRUPT_PIN, gyro_handler);
 
     // --- Calibrate Gyro ---
     std::cout << std::endl;
@@ -171,7 +171,7 @@ void BuggyController::ultrasonic_handling(){
 }
 
 void BuggyController::gyro_handling(){
-    gyro_sensor.interruptTriggered();
+    gyro_sensor.interrupt_triggered();
 }
 
 void BuggyController::gyro_control() {

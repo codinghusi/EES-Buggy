@@ -18,8 +18,8 @@ private:
 
 public:
   MPU6050(uint8_t address = 0x68);
-  void setupInterrupt(uint8_t pinNumber, void (*handler)());
-  void interruptTriggered();
+  void setup_interrupt(uint8_t pinNumber, void (*handler)());
+  void interrupt_triggered();
   void init();
   void clear_interrupt_flag();
   bool calibrate_drift(const std::chrono::duration<float>& duration, const float max_error = 2.f);

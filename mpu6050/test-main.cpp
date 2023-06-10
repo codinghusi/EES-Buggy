@@ -16,7 +16,7 @@ const uint8_t GYRO_INTERRUPT_PIN = 22;
 
 void gyroInterrupt() {
   lock_guard<mutex> guard(mtx);
-  gyro.interruptTriggered();
+  gyro.interrupt_triggered();
 }
 
 void loop();
@@ -27,7 +27,7 @@ void setup() {
     lock_guard<mutex> guard(mtx);
     wiringPiSetup();
     gyro.init();
-    gyro.setupInterrupt(GYRO_INTERRUPT_PIN, gyroInterrupt);  
+    gyro.setup_interrupt(GYRO_INTERRUPT_PIN, gyroInterrupt);  
   }
   
   sleep_for(1s);
