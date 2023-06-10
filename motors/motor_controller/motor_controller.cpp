@@ -13,13 +13,13 @@ MotorController::~MotorController()
 
 void MotorController::slower(float factor)
 {
-    motors->setSpeed(speed * factor);
+    motors->set_speed(speed * factor);
 }
 
 void MotorController::setSpeed(uint8_t speed)
 {
     this->speed = speed;
-    motors->setSpeed(speed);
+    motors->set_speed(speed);
 }
 
 void MotorController::setTargetAngle(Angle targetAngle)
@@ -107,25 +107,25 @@ void MotorController::correct()
         if (diff < 0)
         {
             if (drivingForward) {
-                motors->forwardTurnRight(correction);
+                motors->forward_turn_right(correction);
             } else {
-                motors->backwardTurnLeft(correction);
+                motors->backward_turn_left(correction);
             }
         }
         else {
             if (drivingForward) {
-                motors->forwardTurnLeft(correction);
+                motors->forward_turn_left(correction);
             } else { 
-                motors->backwardTurnRight(correction);
+                motors->backward_turn_right(correction);
             }
         }
     }
     else if (state == State::ROTATING) {
         if (diff < 0) {
-            motors->rotateRight();
+            motors->rotate_right();
         }
         else {
-            motors->rotateLeft();
+            motors->rotate_left();
         }
 
         if (abs(diff) < epsilon) {
