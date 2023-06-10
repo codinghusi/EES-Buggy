@@ -30,8 +30,16 @@ public:
     void gyro_handling();
     void gyro_control();
     void release();
-    void slalom();
-    void rectangle();
+
     void runOver();
-    void circumnavigate();
+
+    void circumnavigateNoGyro();
+    void circumnavigateGyro();
+
+    void rectangleNoGyro();
+    void rectangleGyro();
+
+    void slalomMotors();
+    void slalomUltrasonic();
+    void slalomGyro();
 };

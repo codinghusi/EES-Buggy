@@ -22,11 +22,10 @@ private:
     Angle targetAngle = 0.f;
     Angle currentAngle = 0.f;
     std::mutex motorMtx;
-
-public:
     State state = State::STOPPED;
     State prevState = State::STOPPED;
 
+public:
     Buggy_Motors *motors;
 
     MotorController(uint8_t speed);
@@ -45,6 +44,7 @@ public:
     void rotateRelative(Angle targetAngle);
     void brake(bool doLock = true);
     void release();
+    State getState() { return state; }
 
     // call periodically
     void setCurrentAngle(Angle currentAngle);
