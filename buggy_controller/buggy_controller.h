@@ -17,7 +17,7 @@ private:
     bool circumnavigate_right = true;
 
 public:
-    BuggyController(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed);
+    BuggyController(uint8_t motor_left_port, uint8_t motor_right_port, void (*ultrasonic_handler)(), void (*gyro_handler)(), int8_t speed);
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();

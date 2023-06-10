@@ -6,22 +6,22 @@
 #include "terminal/terminal.h"
 #include "config.h"
 
-void ultrasonicHandler();
-void gyroHandler();
+void ultrasonic_handler();
+void gyro_handler();
 
-BuggyController buggy(MOTOR_LEFT_PORT, MOTOR_RIGHT_PORT, ultrasonicHandler, gyroHandler, INITIAL_BUGGY_SPEED);
+BuggyController buggy(MOTOR_LEFT_PORT, MOTOR_RIGHT_PORT, ultrasonic_handler, gyro_handler, INITIAL_BUGGY_SPEED);
 
-void signalHandler(int signum)
+void signal_handler(int signum)
 {
     std::cout << "Strg-C Programmende" << std::endl;
     buggy.release();
-	disableRawMode();
+	disable_raw_mode();
     exit(signum);
 }
 
 int main()
 {
-  	signal(SIGINT, signalHandler);
+    signal(SIGINT, signal_handler);
 
     std::thread th1(&BuggyController::keyboard_control, &buggy);
     std::thread th2(&BuggyController::ultrasonic_control, &buggy);
@@ -33,10 +33,12 @@ int main()
     return 0;
 }
 
-void ultrasonicHandler(){
+void ultrasonic_handler()
+{
     buggy.ultrasonic_handling();
 }
 
-void gyroHandler() {
+void gyro_handler()
+{
     buggy.gyro_handling();
 }

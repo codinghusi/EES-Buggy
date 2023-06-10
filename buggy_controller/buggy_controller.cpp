@@ -8,12 +8,12 @@
 #include "../terminal/terminal.h"
 #include "../config.h"
 
-BuggyController::BuggyController(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
+BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_port, void (*ultrasonic_handler)(), void (*gyro_handler)(), int8_t speed) : motors(motor_left_port, motor_right_port, speed)
 {
     wiringPiSetup();
-    ultrasonic_sensor.config(ultrasonicHandler);
+    ultrasonic_sensor.config(ultrasonic_handler);
     gyro_sensor.init();
-    gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyroHandler);
+    gyro_sensor.setupInterrupt(GYRO_INTERRUPT_PIN, gyro_handler);
 
     // --- Calibrate Gyro ---
     std::cout << std::endl;
@@ -36,7 +36,7 @@ void BuggyController::release(){
 
 void BuggyController::keyboard_control()
 {
-    enableRawMode();
+    enable_raw_mode();
     char c;
     while (read(STDIN_FILENO, &c, 1) == 1)
     {
@@ -137,7 +137,7 @@ void BuggyController::keyboard_control()
             break;
         }
     }
-    disableRawMode();
+    disable_raw_mode();
 }
 
 void BuggyController::ultrasonic_control()
@@ -145,10 +145,10 @@ void BuggyController::ultrasonic_control()
     using namespace std::chrono_literals;
     do
     {
-        if (ultrasonic_sensor.get_waitforecho())
+        if (ultrasonic_sensor.get_wait_for_echo())
             continue;
         uint8_t stop_distance = 10 + 0.2 * motors.get_speed();
-        if (ultrasonic_sensor.get_distanceresult() < stop_distance)
+        if (ultrasonic_sensor.get_distance_result() < stop_distance)
         {
             if(!prevent_forward) motors.brake();
             prevent_forward = true;
@@ -167,7 +167,7 @@ void BuggyController::ultrasonic_control()
 // TODO: namings! chronometryInterrupt vs. interruptTriggered
 
 void BuggyController::ultrasonic_handling(){
-    ultrasonic_sensor.chronometryInterrupt();
+    ultrasonic_sensor.chronometry_interrupt();
 }
 
 void BuggyController::gyro_handling(){

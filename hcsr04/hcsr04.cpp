@@ -8,7 +8,7 @@
 //TODO denglisch beseitigen, Header Datei, Klasse
 
 
-void HCSR04::chronometryInterrupt()
+void HCSR04::chronometry_interrupt()
 {
 
     if (digitalRead(echo))
@@ -22,7 +22,9 @@ void HCSR04::chronometryInterrupt()
 
         //std::cout << "Zeitdifferenz:" << timediff_microseconds << std::endl;
 
-        distance_result = timediff_microseconds * (34320. / 2000000.0);
+        //SONIC_SPEED in m/s 
+        distance_result = timediff_microseconds * (SONIC_SPEED / 20000.0);
+        
         wait_for_echo = false;
 
     }
@@ -42,11 +44,12 @@ void HCSR04::config(void (*handler)()) {
 
 void HCSR04::distance_measurement() {
     
+    using namespace std::chrono_literals;
     //für 10 Microsekunden HighLevel an Trigger um signal auszulesen
     digitalWrite(trigger,LOW);
-    std::this_thread::sleep_for(std::chrono::microseconds(2));
+    std::this_thread::sleep_for(2ms);
     digitalWrite(trigger,HIGH);
-    std::this_thread::sleep_for(std::chrono::microseconds(10));
+    std::this_thread::sleep_for(10ms);
     digitalWrite(trigger, LOW);
 
     
