@@ -10,7 +10,6 @@
 
 Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
 {
-    // buggy_motors->sayHello();
     wiringPiSetup();
     ultrasonic_sensor.config(ultrasonicHandler);
     gyro_sensor.init();
@@ -28,7 +27,7 @@ Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort
     gyro_sensor.gyroscope.y = 0;
     gyro_sensor.gyroscope.z = 0;
     std::cout << "OK." << std::endl;
-
+    buggy_motors->say_hello();
 }
 
 void Buggy_Controller::release(){
@@ -63,17 +62,17 @@ void Buggy_Controller::keyboard_control()
             break;
         case 'a':
             motors.forwards();
-            motors.driveRelative(90);
+            motors.drive_relative(90);
             break;
         case 'd':
             motors.forwards();
-            motors.driveRelative(-90);
+            motors.drive_relative(-90);
             break;
         case 'q':
-            motors.rotateRelative(-90);
+            motors.rotate_relative(-90);
             break;
         case 'e':
-            motors.rotateRelative(90);
+            motors.rotate_relative(90);
             break;
         case 'c':
             std::cout << "Circumnavigate no gyro" << std::endl;
@@ -110,17 +109,17 @@ void Buggy_Controller::keyboard_control()
             break;
 
         case '+':
-            if (motors.getSpeed() + 5 <= 100) {
-                motors.setSpeed(motors.getSpeed() + 5);
+            if (motors.get_speed() + 5 <= 100) {
+                motors.set_speed(motors.get_speed() + 5);
             }
-            std::cout << "Speed: " << (int) motors.getSpeed() << std::endl;
+            std::cout << "Speed: " << (int) motors.get_speed() << std::endl;
             break;
 
         case '-':
-            if (motors.getSpeed() - 5 > 0) {
-                motors.setSpeed(motors.getSpeed() - 5);
+            if (motors.get_speed() - 5 > 0) {
+                motors.set_speed(motors.get_speed() - 5);
             }
-            std::cout << "Speed: " << (int) motors.getSpeed() << std::endl;
+            std::cout << "Speed: " << (int) motors.get_speed() << std::endl;
             break;
 
         // reset gyroscope
@@ -148,7 +147,7 @@ void Buggy_Controller::ultrasonic_control()
     {
         if (ultrasonic_sensor.get_waitforecho())
             continue;
-        uint8_t stop_distance = 10 + 0.2 * motors.getSpeed();
+        uint8_t stop_distance = 10 + 0.2 * motors.get_speed();
         if (ultrasonic_sensor.get_distanceresult() < stop_distance)
         {
             if(!prevent_forward) motors.brake();
@@ -177,7 +176,7 @@ void Buggy_Controller::gyro_handling(){
 
 void Buggy_Controller::gyro_control() {
     while(true) {
-        motors.setCurrentAngle(Angle(gyro_sensor.gyroscope.z));
+        motors.set_current_angle(Angle(gyro_sensor.gyroscope.z));
         motors.correct();
         std::this_thread::sleep_for(20ms);
     }

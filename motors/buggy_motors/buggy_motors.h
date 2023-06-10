@@ -8,52 +8,43 @@ T map(T x, T in_min, T in_max, T out_min, T out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-class Buggy_Motors{
-    enum class State
-    {
-        STOPPED,
-        FORWARD,
-        BACKWARD,
-        ROTATING
-    };
-    State leftState = State::STOPPED;
-    State rightState = State::STOPPED;
-    float turnfactor;
-    uint8_t motorspeed;
-    AdafruitMotorHAT hat;
-    std::shared_ptr<AdafruitDCMotor> motorLeft, motorRight;
-    uint8_t startSpeed = MOTORS_SPEED_OFFSET;;
+class Buggy_Motors
+{
+  float turnfactor;
+  uint8_t motorspeed;
+  AdafruitMotorHAT hat;
+  std::shared_ptr<AdafruitDCMotor> motor_left, motor_right;
+  uint8_t start_speed = MOTORS_SPEED_OFFSET;
+  ;
 
-    inline void forwardLeft() { motorLeft->run(AdafruitDCMotor::kForward); }
-    inline void forwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }
-    // inline void forwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
-    inline void backwardLeft() { motorLeft->run(AdafruitDCMotor::kBackward); }
-    inline void backwardRight() { motorRight->run(AdafruitDCMotor::kForward); }
-    // inline void backwardRight() { motorRight->run(AdafruitDCMotor::kBackward); }
-    inline void brakeLeft() { motorLeft->run(AdafruitDCMotor::kBrake); }
-    inline void brakeRight() { motorRight->run(AdafruitDCMotor::kBrake); }
-    inline float mapSpeed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, startSpeed, 255); }
+  inline void forward_left() { motor_left->run(AdafruitDCMotor::kForward); }
+  inline void forward_right() { motor_right->run(AdafruitDCMotor::kBackward); }
+  inline void backward_left() { motor_left->run(AdafruitDCMotor::kBackward); }
+  inline void backward_right() { motor_right->run(AdafruitDCMotor::kForward); }
+  inline void brake_left() { motor_left->run(AdafruitDCMotor::kBrake); }
+  inline void brake_right() { motor_right->run(AdafruitDCMotor::kBrake); }
+  inline float map_speed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, start_speed, 255); }
 
-public:
-    Buggy_Motors(uint8_t motorLeftPort, uint8_t motorRightPort, uint8_t speed = 100, float turnfactor = 0.9);
-    ~Buggy_Motors();
-    void sayHello();
-    void setSpeedLeft(int8_t motorspeed);
-    void setSpeedRight(int8_t motorspeed);
-    void setSpeed(int8_t motorspeed);
-    void setTurnfactor(float turnfactor);
-    void forward();
-    void backward();
-    void brake();
-    void rotateLeft();
-    void rotateRight();
-    void forwardTurnLeft();
-    void forwardTurnLeft(float turnfactor);
-    void forwardTurnRight();
-    void forwardTurnRight(float turnfactor);
-    void backwardTurnLeft();
-    void backwardTurnLeft(float turnfactor);
-    void backwardTurnRight();
-    void backwardTurnRight(float turnfactor);
-    void release();
+  public:
+  Buggy_Motors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed = 100, float turnfactor = 0.9);
+  ~Buggy_Motors();
+  void say_hello();
+  void set_speed_left(int8_t motorspeed);
+  void set_speed_right(int8_t motorspeed);
+  void set_speed(int8_t motorspeed);
+  void set_turnfactor(float turnfactor);
+  void forward();
+  void backward();
+  void brake();
+  void rotate_left();
+  void rotate_right();
+  void forward_turn_left();
+  void forward_turn_left(float turnfactor);
+  void forward_turn_right();
+  void forward_turn_right(float turnfactor);
+  void backward_turn_left();
+  void backward_turn_left(float turnfactor);
+  void backward_turn_right();
+  void backward_turn_right(float turnfactor);
+  void release();
 };
