@@ -10,23 +10,23 @@
 class MPU6050 {
 private:
   int fd;
-  std::chrono::time_point<std::chrono::steady_clock> lastMeasurement;
+  std::chrono::time_point<std::chrono::steady_clock> last_measurement;
   std::mutex mtx;
 
-  float convertRawGyroscopeValue(float oldValue, float value, float drift, float delta);
-  float convertRawAccelerometerValue(float value, float delta);
+  float convert_raw_gyroscope_value(float oldValue, float value, float drift, float delta);
+  float convert_raw_accelerometer_value(float value, float delta);
 
 public:
   MPU6050(uint8_t address = 0x68);
   void setupInterrupt(uint8_t pinNumber, void (*handler)());
   void interruptTriggered();
   void init();
-  void clearInterruptFlag();
-  bool calibrateDrift(const std::chrono::duration<float>& duration, const float maxError = 2.f);
+  void clear_interrupt_flag();
+  bool calibrate_drift(const std::chrono::duration<float>& duration, const float max_error = 2.f);
 
 public:
     
-  volatile Vec3<float> gyroscope, accelerometer, position;
+  volatile Vec3<float> gyroscope, accelerometer;
   Vec3<float> drift;
 
   Byte SELF_TEST_X;
