@@ -27,7 +27,7 @@ BuggyController::BuggyController(uint8_t motorLeftPort, uint8_t motorRightPort, 
     gyro_sensor.gyroscope.y = 0;
     gyro_sensor.gyroscope.z = 0;
     std::cout << "OK." << std::endl;
-    buggy_motors->say_hello();
+    motors.motors->say_hello();
 }
 
 void BuggyController::release(){
@@ -96,7 +96,7 @@ void BuggyController::keyboard_control()
             break;
         case 'O':
             std::cout << "Slalom with gyrosensor" << std::endl;
-            slalomGyro();
+            slalom_gyro();
             break;
         case 'p':
             std::cout << "Slalom with ultrasonic" << std::endl;

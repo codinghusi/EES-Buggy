@@ -173,7 +173,7 @@ void BuggyController::slalom_ultrasonic()
     circumnavigate_no_gyro();
 }
 
-void BuggyController::slalomGyro()
+void BuggyController::slalom_gyro()
 {
     motors.forwards();
     motors.drive();

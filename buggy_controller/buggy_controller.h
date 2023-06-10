@@ -35,5 +35,5 @@ public:
 
     void slalom_motors();
     void slalom_ultrasonic();
-    void slalomGyro();
+    void slalom_gyro();
 };

@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-MotorController::MotorController(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed) : motors(new Buggy_Motors(motor_left_port, motor_right_port, speed))
+MotorController::MotorController(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed) : motors(new BuggyMotors(motor_left_port, motor_right_port, speed))
 {
     set_speed(speed);
 }
