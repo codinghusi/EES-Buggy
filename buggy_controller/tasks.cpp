@@ -39,19 +39,19 @@ void BuggyController::circumnavigate_no_gyro()
     std::chrono::milliseconds rotationtime = std::chrono::milliseconds(745);
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(1000);
     std::chrono::milliseconds dodgetime = std::chrono::milliseconds(2000);
-    circumnavigate_right ? motors.motors->rotateRight() : motors.motors->rotateLeft();
+    circumnavigate_right ? motors.motors->rotate_right() : motors.motors->rotate_left();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    circumnavigate_right ? motors.motors->rotateLeft() : motors.motors->rotateRight();
+    circumnavigate_right ? motors.motors->rotate_left() : motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(dodgetime);
-    circumnavigate_right ? motors.motors->rotateLeft() : motors.motors->rotateRight();
+    circumnavigate_right ? motors.motors->rotate_left() : motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    circumnavigate_right ? motors.motors->rotateRight() : motors.motors->rotateLeft();
+    circumnavigate_right ? motors.motors->rotate_right() : motors.motors->rotate_left();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->brake();
     circumnavigate_right = !circumnavigate_right;
@@ -94,19 +94,19 @@ void BuggyController::rectangle_no_gyro()
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(1500);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    motors.motors->rotateRight();
+    motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    motors.motors->rotateRight();
+    motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    motors.motors->rotateRight();
+    motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->forward();
     std::this_thread::sleep_for(forwardtime);
-    motors.motors->rotateRight();
+    motors.motors->rotate_right();
     std::this_thread::sleep_for(rotationtime);
     motors.motors->brake();
 }
@@ -143,13 +143,13 @@ void BuggyController::slalom_motors()
 {
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
-    motors.motors->setSpeedLeft(leftspeed);
-    motors.motors->setSpeedRight(rightspeed);
+    motors.motors->set_speed_left(leftspeed);
+    motors.motors->set_speed_right(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(200ms);
     circumnavigate_no_gyro();
-    motors.motors->setSpeedLeft(leftspeed);
-    motors.motors->setSpeedRight(rightspeed);
+    motors.motors->set_speed_left(leftspeed);
+    motors.motors->set_speed_right(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(5000ms);
     circumnavigate_no_gyro();
@@ -159,14 +159,14 @@ void BuggyController::slalom_ultrasonic()
 {
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
-    motors.motors->setSpeedLeft(leftspeed);
-    motors.motors->setSpeedRight(rightspeed);
+    motors.motors->set_speed_left(leftspeed);
+    motors.motors->set_speed_right(rightspeed);
     motors.motors->forward();
     while (!prevent_forward)
         ;
     circumnavigate_no_gyro();
-    motors.motors->setSpeedLeft(leftspeed);
-    motors.motors->setSpeedRight(rightspeed);
+    motors.motors->set_speed_left(leftspeed);
+    motors.motors->set_speed_right(rightspeed);
     motors.motors->forward();
     while (!prevent_forward)
         ;
