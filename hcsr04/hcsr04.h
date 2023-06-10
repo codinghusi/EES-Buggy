@@ -34,7 +34,10 @@ public:
 	bool get_wait_for_echo(){
 		auto timediff = std::chrono::high_resolution_clock::now() - start;
         long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
-		if(timediff_microseconds > 26224)
+
+        //SONIC_SPEED in m/s 
+        distance = timediff_microseconds * (SONIC_SPEED / 20000.0);
+		if(distance > ULTRASONIC_RANGE)
 			wait_for_echo =false;
 
 		return wait_for_echo;}

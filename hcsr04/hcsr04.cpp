@@ -20,8 +20,6 @@ void HCSR04::chronometryInterrupt()
 
         long long timediff_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(timediff).count();
 
-        //std::cout << "Zeitdifferenz:" << timediff_microseconds << std::endl;
-
         //SONIC_SPEED in m/s 
         distance_result = timediff_microseconds * (SONIC_SPEED / 20000.0);
         
