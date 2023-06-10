@@ -14,8 +14,8 @@ private:
 
  
 public:
-//Pin 3 in wp ist gpio22 motorhead
-	HCSR04(uint8_t t = ECHO, uint8_t e = TRIGGER, uint8_t bl=BRAKE_LIGHT) {
+	//Pin 3 in wp ist gpio22 motorhead
+	HCSR04(uint8_t t = ECHO, uint8_t e = TRIGGER, uint8_t bl = BRAKE_LIGHT) {
 		distance_result = ULTRASONIC_RANGE;
 		wait_for_echo = false;
 		start = std::chrono::high_resolution_clock::now();

@@ -38,7 +38,7 @@ void setup() {
        << "Don't move!" << endl;
       
   while (!gyro.calibrate_drift(1s)) {
-    cout << "Like I said... DON'T the fuck MOVE!" << endl;
+    cout << "Please don't move :)" << endl;
   }
 
   cout << "OK." << endl;

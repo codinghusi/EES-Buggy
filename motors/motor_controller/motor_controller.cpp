@@ -157,8 +157,6 @@ void MotorController::correct()
             motors->rotate_left();
         }
 
-        std::cout << "diff: " << diff << std::endl;
-
         if (abs(diff) < ROTATION_EPSILON) {
             reset_temporary_speed();
             brake(false);
@@ -167,7 +165,6 @@ void MotorController::correct()
             using namespace std::chrono_literals;
             motors->brake();
             std::this_thread::sleep_for(10ms);
-            std::cout << "nearing" << std::endl;
         } 
     }
 }

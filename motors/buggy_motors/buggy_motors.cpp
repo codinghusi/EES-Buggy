@@ -20,11 +20,11 @@ void BuggyMotors::say_hello()
     using namespace std::chrono_literals;
     set_speed(motorspeed);
     rotate_left();
-    std::this_thread::sleep_for (200ms);
+    std::this_thread::sleep_for(200ms);
     rotate_right();
-    std::this_thread::sleep_for (400ms);
+    std::this_thread::sleep_for(400ms);
     rotate_left();
-    std::this_thread::sleep_for (200ms);
+    std::this_thread::sleep_for(200ms);
     brake();
 }
 

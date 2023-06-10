@@ -43,15 +43,13 @@ void HCSR04::config(void (*handler)()) {
 void HCSR04::distance_measurement() {
     
     using namespace std::chrono_literals;
-    //für 10 Microsekunden HighLevel an Trigger um signal auszulesen
+    //für 10 Microsekunden HIGH-Pegel an Trigger um Signal auszulesen
     digitalWrite(trigger,LOW);
     std::this_thread::sleep_for(2ms);
     digitalWrite(trigger,HIGH);
     std::this_thread::sleep_for(10ms);
     digitalWrite(trigger, LOW);
 
-    
-    //std::cout << "Startwert:"<<std::chrono::duration_cast<std::chrono::microseconds>(start).count() << std::endl;
     wait_for_echo = true;
     
 }
