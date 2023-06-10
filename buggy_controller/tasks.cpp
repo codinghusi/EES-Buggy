@@ -8,14 +8,14 @@ void BuggyController::run_over()
     while (!prevent_forward)
         ;
 
-    motors.rotateRelative(90);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(90);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
 
     std::this_thread::sleep_for(100ms);
 
-    motors.rotateRelative(90);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(90);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
 
     motors.drive();
@@ -27,10 +27,10 @@ void BuggyController::run_over()
 
     motors.backwards();
     motors.drive();
-    motors.setTemporarySpeed(100);
+    motors.set_temporary_speed(100);
     std::this_thread::sleep_for(1000ms);
     motors.brake();
-    motors.resetTemporarySpeed();
+    motors.reset_temporary_speed();
 }
 
 void BuggyController::circumnavigate_no_gyro()
@@ -63,26 +63,26 @@ void BuggyController::circumnavigate_gyro()
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(2500);
     std::chrono::milliseconds dodgetime = std::chrono::milliseconds(800);
     int16_t angle = circumnavigate_right ? 90 : -90;
-    motors.rotateRelative(angle);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(angle);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     motors.drive();
     std::this_thread::sleep_for(dodgetime);
-    motors.rotateRelative(-angle);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(-angle);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     motors.drive();
     std::this_thread::sleep_for(forwardtime);
-    motors.rotateRelative(-angle);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(-angle);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     motors.drive();
     std::this_thread::sleep_for(dodgetime);
-    motors.rotateRelative(angle);
-    while (motors.getState() != MotorController::State::STOPPED)
+    motors.rotate_relative(angle);
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     circumnavigate_right = !circumnavigate_right;
 }
@@ -120,22 +120,22 @@ void BuggyController::rectangle_gyro()
     motors.forwards();
     std::this_thread::sleep_for(forwardtime);
     motors.rotate(90);
-    while (motors.getState() != MotorController::State::STOPPED)
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     std::this_thread::sleep_for(forwardtime);
     motors.rotate(180);
-    while (motors.getState() != MotorController::State::STOPPED)
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     std::this_thread::sleep_for(forwardtime);
     motors.rotate(270);
-    while (motors.getState() != MotorController::State::STOPPED)
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
     motors.forwards();
     std::this_thread::sleep_for(forwardtime);
     motors.rotate(0);
-    while (motors.getState() != MotorController::State::STOPPED)
+    while (motors.get_state() != MotorController::State::STOPPED)
         ;
 }
 
