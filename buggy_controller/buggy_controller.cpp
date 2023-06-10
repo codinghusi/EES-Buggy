@@ -109,7 +109,8 @@ void Buggy_Controller::ultrasonic_control()
     {
         if (ultrasonic_sensor.get_waitforecho())
             continue;
-        if (ultrasonic_sensor.get_distanceresult() < 10)
+        uint8_t stop_distance = 10 + 0.2 * speed;
+        if (ultrasonic_sensor.get_distanceresult() < stop_distance)
         {
             if(!prevent_forward) motors.brake();
             prevent_forward = true;
