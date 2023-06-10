@@ -86,10 +86,16 @@ void Buggy_Controller::keyboard_control()
         case 'o':
             slalom();
             break;
+
+        // reset gyroscope
+        case 'k':
+            gyro_sensor.gyroscope.z = 0;
+            break;
+
         case 27:
-        continue;
+            continue;
         case '[':
-        continue;
+            continue;
 
         default:
             motors.brake();

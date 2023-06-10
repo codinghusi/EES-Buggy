@@ -7,6 +7,35 @@
 
 // TODO: implement Master/Slave
 
+#define GYRO_RANGE 2000.f
+
+void MPU6050::init() {
+  std::lock_guard<std::mutex> lock(mtx);
+
+  DEVICE_RESET = 1;
+  sleep_for(10ms);
+  SLEEP = 0;
+  // FS_SEL = 0; // 250 °/s
+  FS_SEL = 3; // 2000°/s // if you use this line: please change it also in define GYRO_RANGE
+}
+
+void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
+  std::lock_guard<std::mutex> lock(mtx);
+
+  INT_LEVEL = 0; // Active HIGH
+  INT_OPEN = 0; // Push Pull
+  // LATCH_INT_EN = 1; // 'Pending Register' doesn't clear itself
+  LATCH_INT_EN = 0;
+  INT_RD_CLEAR = 0; // Pending Register only cleared when reading INT_STATUS
+  DATA_RDY_EN = 1; // Trigger interrupt when new sensor data is ready
+  pinMode(pinNumber, INPUT);
+  pullUpDnControl(pinNumber, PUD_DOWN);
+  wiringPiISR(pinNumber, INT_EDGE_RISING, handler);
+  lastMeasurement = std::chrono::steady_clock::now();
+  sleep_for(50ms);
+  clearInterruptFlag();
+}
+
 bool MPU6050::calibrateDrift(const std::chrono::duration<float>& duration, const float maxError) {
   Vec3<float> before = {gyroscope.x, gyroscope.y, gyroscope.z};
   sleep_for(duration);
@@ -22,7 +51,7 @@ bool MPU6050::calibrateDrift(const std::chrono::duration<float>& duration, const
 float MPU6050::convertRawGyroscopeValue(float oldValue, float value, float drift, float delta) {
   constexpr float alpha = 0.98f;
   constexpr float beta = 1.f - alpha;
-  const float mult = delta * (250.f / 32768.f);
+  const float mult = delta * (GYRO_RANGE / 32768.f);
   return fmod(alpha * (oldValue + value * mult - drift * delta) + beta * oldValue, 360.f);
 }
 
@@ -32,36 +61,9 @@ float MPU6050::convertRawAccelerometerValue(float value, float delta) {
   return value * mult * delta;
 }
 
-void MPU6050::init() {
-  std::lock_guard<std::mutex> lock(mtx);
 
-  DEVICE_RESET = 1;
-  sleep_for(10ms);
-  SLEEP = 0;
-  FS_SEL = 0; // 250 °/s
-  // FS_SEL = 3; // 2000°/s // if you use this line: please change it also in convertRawGyroscopeValue(...)
-}
 
-void MPU6050::setupInterrupt(uint8_t pinNumber, void (*handler)()) {
-  std::lock_guard<std::mutex> lock(mtx);
 
-  INT_LEVEL = 0; // Active HIGH
-  INT_OPEN = 0; // Push Pull
-  // LATCH_INT_EN = 1; // 'Pending Register' doesn't clear itself
-  LATCH_INT_EN = 0;
-
-  // INT_RD_CLEAR = 1; // Pending Register always cleared on Read-Action
-  INT_RD_CLEAR = 0; // Pending Register only cleared when reading INT_STATUS
-
-  DATA_RDY_EN = 1; // Trigger interrupt when new sensor data is ready
-
-  pinMode(pinNumber, INPUT);
-  pullUpDnControl(pinNumber, PUD_DOWN);
-  wiringPiISR(pinNumber, INT_EDGE_RISING, handler);
-  lastMeasurement = std::chrono::steady_clock::now();
-  sleep_for(100ms);
-  clearInterruptFlag();
-}
 
 void MPU6050::interruptTriggered() {
   std::lock_guard<std::mutex> lock(mtx);

@@ -80,7 +80,6 @@ void MotorController::brake(bool doLock)
 
 void MotorController::release()
 {
-    std::unique_lock<std::mutex> lock(motorMtx);
     brake();
     motors->release();
 }
