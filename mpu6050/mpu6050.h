@@ -1,7 +1,7 @@
-#include "utils/DistributedBits.hpp"
-#include "utils/Word.hpp"
-#include "utils/Bits.hpp"
-#include "utils/Vec3.hpp"
+#include "utils/distributed_bits.hpp"
+#include "utils/word.hpp"
+#include "utils/bits.hpp"
+#include "utils/vec3.hpp"
 #include <chrono>
 #include <mutex>
 

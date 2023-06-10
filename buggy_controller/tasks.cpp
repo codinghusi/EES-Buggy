@@ -1,6 +1,6 @@
 #include "buggy_controller.h"
 
-void Buggy_Controller::runOver()
+void BuggyController::run_over()
 {
     using namespace std::chrono_literals;
     motors.forwards();
@@ -33,7 +33,7 @@ void Buggy_Controller::runOver()
     motors.resetTemporarySpeed();
 }
 
-void Buggy_Controller::circumnavigateNoGyro()
+void BuggyController::circumnavigate_no_gyro()
 {
     using namespace std::chrono_literals;
     std::chrono::milliseconds rotationtime = std::chrono::milliseconds(745);
@@ -57,7 +57,7 @@ void Buggy_Controller::circumnavigateNoGyro()
     circumnavigate_right = !circumnavigate_right;
 }
 
-void Buggy_Controller::circumnavigateGyro()
+void BuggyController::circumnavigate_gyro()
 {
     using namespace std::chrono_literals;
     std::chrono::milliseconds forwardtime = std::chrono::milliseconds(2500);
@@ -87,7 +87,7 @@ void Buggy_Controller::circumnavigateGyro()
     circumnavigate_right = !circumnavigate_right;
 }
 
-void Buggy_Controller::rectangleNoGyro()
+void BuggyController::rectangle_no_gyro()
 {
     using namespace std::chrono_literals;
     std::chrono::milliseconds rotationtime = std::chrono::milliseconds(745);
@@ -111,7 +111,7 @@ void Buggy_Controller::rectangleNoGyro()
     motors.motors->brake();
 }
 
-void Buggy_Controller::rectangleGyro()
+void BuggyController::rectangle_gyro()
 {
     // reset gyroscope
     gyro_sensor.gyroscope.z = 0;
@@ -139,7 +139,7 @@ void Buggy_Controller::rectangleGyro()
         ;
 }
 
-void Buggy_Controller::slalomMotors()
+void BuggyController::slalom_motors()
 {
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
@@ -147,15 +147,15 @@ void Buggy_Controller::slalomMotors()
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(200ms);
-    circumnavigateNoGyro();
+    circumnavigate_no_gyro();
     motors.motors->setSpeedLeft(leftspeed);
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     std::this_thread::sleep_for(5000ms);
-    circumnavigateNoGyro();
+    circumnavigate_no_gyro();
 }
 
-void Buggy_Controller::slalomUltrasonic()
+void BuggyController::slalom_ultrasonic()
 {
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
@@ -164,25 +164,25 @@ void Buggy_Controller::slalomUltrasonic()
     motors.motors->forward();
     while (!prevent_forward)
         ;
-    circumnavigateNoGyro();
+    circumnavigate_no_gyro();
     motors.motors->setSpeedLeft(leftspeed);
     motors.motors->setSpeedRight(rightspeed);
     motors.motors->forward();
     while (!prevent_forward)
         ;
-    circumnavigateNoGyro();
+    circumnavigate_no_gyro();
 }
 
-void Buggy_Controller::slalomGyro()
+void BuggyController::slalomGyro()
 {
     motors.forwards();
     motors.drive();
     while (!prevent_forward)
         ;
-    circumnavigateGyro();
+    circumnavigate_gyro();
     motors.forwards();
     motors.drive();
     while (!prevent_forward)
         ;
-    circumnavigateGyro();
+    circumnavigate_gyro();
 }

@@ -29,7 +29,8 @@ $(OBJ_DIR)/%.o: %.cpp $(HPP_FILES) $(findstring %.h, $(H_FILES))
 	$(info compiling $<)
 
 clean:
-	rm -f $(OBJ_FILES) $(OBJ_NAME)
+	rm -rf obj
+	mkdir obj
 
 .dependencies: $(CPP_FILES) $(H_FILES)
 	$(info )

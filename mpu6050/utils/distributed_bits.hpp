@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bits.hpp"
+#include "bits.hpp"
 
 template<class Type = uint8_t, uint8_t Count = 2>
 class DistributedBits {

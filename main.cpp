@@ -9,7 +9,7 @@
 void ultrasonicHandler();
 void gyroHandler();
 
-Buggy_Controller buggy(MOTOR_LEFT_PORT, MOTOR_RIGHT_PORT, ultrasonicHandler, gyroHandler, INITIAL_BUGGY_SPEED);
+BuggyController buggy(MOTOR_LEFT_PORT, MOTOR_RIGHT_PORT, ultrasonicHandler, gyroHandler, INITIAL_BUGGY_SPEED);
 
 void signalHandler(int signum)
 {
@@ -23,9 +23,9 @@ int main()
 {
   	signal(SIGINT, signalHandler);
 
-    std::thread th1(&Buggy_Controller::keyboard_control, &buggy);
-    std::thread th2(&Buggy_Controller::ultrasonic_control, &buggy);
-    std::thread th3(&Buggy_Controller::gyro_control, &buggy);
+    std::thread th1(&BuggyController::keyboard_control, &buggy);
+    std::thread th2(&BuggyController::ultrasonic_control, &buggy);
+    std::thread th3(&BuggyController::gyro_control, &buggy);
 
     th1.join();
     th2.join();

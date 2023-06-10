@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "../../utils/angle/angle.h"
+#include "../../angle/angle.h"
 #include "../buggy_motors/buggy_motors.h"
 #include <mutex>
 

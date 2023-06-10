@@ -8,7 +8,7 @@
 #include "../terminal/terminal.h"
 #include "../config.h"
 
-Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
+BuggyController::BuggyController(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed) : motors(motorLeftPort, motorRightPort, speed)
 {
     // buggy_motors->sayHello();
     wiringPiSetup();
@@ -31,11 +31,11 @@ Buggy_Controller::Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort
 
 }
 
-void Buggy_Controller::release(){
+void BuggyController::release(){
     motors.release();
 }
 
-void Buggy_Controller::keyboard_control()
+void BuggyController::keyboard_control()
 {
     enableRawMode();
     char c;
@@ -77,23 +77,23 @@ void Buggy_Controller::keyboard_control()
             break;
         case 'c':
             std::cout << "Circumnavigate no gyro" << std::endl;
-            circumnavigateNoGyro();
+            circumnavigate_no_gyro();
             break;
         case 'C':
             std::cout << "Circumnavigate with gyro" << std::endl;
-            circumnavigateGyro();
+            circumnavigate_gyro();
             break;
         case 'r':
             std::cout << "Rectangle no gyro" << std::endl;
-            rectangleNoGyro();
+            rectangle_no_gyro();
             break;
         case 'R':
             std::cout << "Rectangle with gyro" << std::endl;
-            rectangleGyro();
+            rectangle_gyro();
             break;
         case 'o':
             std::cout << "Slalom vanilla" << std::endl;
-            slalomMotors();
+            slalom_motors();
             break;
         case 'O':
             std::cout << "Slalom with gyrosensor" << std::endl;
@@ -101,12 +101,12 @@ void Buggy_Controller::keyboard_control()
             break;
         case 'p':
             std::cout << "Slalom with ultrasonic" << std::endl;
-            slalomUltrasonic();
+            slalom_ultrasonic();
             break;
 
         case 'u': 
             std::cout << "run over" << std::endl;
-            runOver();
+            run_over();
             break;
 
         case '+':
@@ -141,7 +141,7 @@ void Buggy_Controller::keyboard_control()
     disableRawMode();
 }
 
-void Buggy_Controller::ultrasonic_control()
+void BuggyController::ultrasonic_control()
 {
     using namespace std::chrono_literals;
     do
@@ -167,15 +167,15 @@ void Buggy_Controller::ultrasonic_control()
 
 // TODO: namings! chronometryInterrupt vs. interruptTriggered
 
-void Buggy_Controller::ultrasonic_handling(){
+void BuggyController::ultrasonic_handling(){
     ultrasonic_sensor.chronometryInterrupt();
 }
 
-void Buggy_Controller::gyro_handling(){
+void BuggyController::gyro_handling(){
     gyro_sensor.interruptTriggered();
 }
 
-void Buggy_Controller::gyro_control() {
+void BuggyController::gyro_control() {
     while(true) {
         motors.setCurrentAngle(Angle(gyro_sensor.gyroscope.z));
         motors.correct();

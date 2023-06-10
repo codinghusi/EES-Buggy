@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Word.hpp"
+#include "word.hpp"
 #include <mutex>
 
 template<class Type = uint8_t>

@@ -5,7 +5,7 @@
 #include "../mpu6050/mpu6050.h"
 #include "../motors/motor_controller/motor_controller.h"
 
-class Buggy_Controller
+class BuggyController
 {
 private:
     MotorController motors;
@@ -17,7 +17,7 @@ private:
     bool circumnavigate_right = true;
 
 public:
-    Buggy_Controller(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed);
+    BuggyController(uint8_t motorLeftPort, uint8_t motorRightPort, void (*ultrasonicHandler)(), void (*gyroHandler)(), int8_t speed);
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();
@@ -25,15 +25,15 @@ public:
     void gyro_control();
     void release();
 
-    void runOver();
+    void run_over();
 
-    void circumnavigateNoGyro();
-    void circumnavigateGyro();
+    void circumnavigate_no_gyro();
+    void circumnavigate_gyro();
 
-    void rectangleNoGyro();
-    void rectangleGyro();
+    void rectangle_no_gyro();
+    void rectangle_gyro();
 
-    void slalomMotors();
-    void slalomUltrasonic();
+    void slalom_motors();
+    void slalom_ultrasonic();
     void slalomGyro();
 };
