@@ -4,11 +4,12 @@
 #include <iostream>
 #include "buggy_controller/buggy_controller.h"
 #include "terminal/terminal.h"
+#include "config.h"
 
 void ultrasonicHandler();
 void gyroHandler();
 
-Buggy_Controller buggy(ultrasonicHandler, gyroHandler);
+Buggy_Controller buggy(motorLeftPort, motorRightPort, ultrasonicHandler, gyroHandler);
 
 void signalHandler(int signum)
 {
