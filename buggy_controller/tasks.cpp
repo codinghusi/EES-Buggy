@@ -3,11 +3,34 @@
 void Buggy_Controller::runOver()
 {
     using namespace std::chrono_literals;
-    motors.motors->backward();
+    motors.forwards();
+    motors.drive();
+    while (!prevent_forward)
+        ;
+
+    motors.rotateRelative(90);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
+
+    std::this_thread::sleep_for(100ms);
+
+    motors.rotateRelative(90);
+    while (motors.getState() != MotorController::State::STOPPED)
+        ;
+
+    motors.drive();
     std::this_thread::sleep_for(200ms);
-    motors.motors->forward();
-    std::this_thread::sleep_for(1s);
-    motors.motors->brake();
+
+    motors.brake();
+    std::this_thread::sleep_for(100ms);
+
+
+    motors.backwards();
+    motors.drive();
+    motors.setTemporarySpeed(100);
+    std::this_thread::sleep_for(1000ms);
+    motors.brake();
+    motors.resetTemporarySpeed();
 }
 
 void Buggy_Controller::circumnavigateNoGyro()
@@ -37,9 +60,9 @@ void Buggy_Controller::circumnavigateNoGyro()
 void Buggy_Controller::circumnavigateGyro()
 {
     using namespace std::chrono_literals;
-    std::chrono::milliseconds forwardtime = std::chrono::milliseconds(1000);
-    std::chrono::milliseconds dodgetime = std::chrono::milliseconds(2000);
-    uint8_t angle = circumnavigate_right ? 90 : -90;
+    std::chrono::milliseconds forwardtime = std::chrono::milliseconds(2500);
+    std::chrono::milliseconds dodgetime = std::chrono::milliseconds(800);
+    int16_t angle = circumnavigate_right ? 90 : -90;
     motors.rotateRelative(angle);
     while (motors.getState() != MotorController::State::STOPPED)
         ;
@@ -157,7 +180,7 @@ void Buggy_Controller::slalomGyro()
     while (!prevent_forward)
         ;
     circumnavigateGyro();
-    motors->forward();
+    motors.forwards();
     motors.drive();
     while (!prevent_forward)
         ;
