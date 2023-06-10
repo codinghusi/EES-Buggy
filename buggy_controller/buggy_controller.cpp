@@ -133,15 +133,15 @@ void Buggy_Controller::ultrasonic_control()
         {
             if(!prevent_forward) motors.brake();
             prevent_forward = true;
-            ultrasonic_sensor.bremslicht_ein();
+            ultrasonic_sensor.brake_light_on();
         }
         else
         {
             prevent_forward = false;
-            ultrasonic_sensor.bremslicht_aus();
+            ultrasonic_sensor.brake_light_off();
         }
         std::this_thread::sleep_for(20ms);
-        ultrasonic_sensor.distance_messung();
+        ultrasonic_sensor.distance_measurement();
     } while (1);
 }
 

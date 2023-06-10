@@ -8,7 +8,7 @@ private:
 	bool wait_for_echo;
 	uint8_t trigger;
 	uint8_t echo;
-	uint8_t bremslicht;
+	uint8_t brake_light;
 
 
 
@@ -20,15 +20,14 @@ public:
 		start = std::chrono::high_resolution_clock::now();
 		trigger = t;
 		echo = e;
-		bremslicht = bl;
+		brake_light = bl;
 	}
 
 	void config(void (*handler)());
-	void distance_messung();
+	void distance_measurement();
 	void chronometryInterrupt();
-	void notbremsung();
-	void bremslicht_ein();
-	void bremslicht_aus();
+	void brake_light_on();
+	void brake_light_off();
 	double get_distanceresult(){return distance_result;}
 	void set_distanceresult(double d){distance_result=d;}
 	bool get_waitforecho(){
