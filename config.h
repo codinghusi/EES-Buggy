@@ -21,6 +21,8 @@
 
 #define GYRO_RANGE                  2000.f // 2000 deg/s
 #define GYRO_FS_SEL                 3
+#define ACCEL_RANGE                 2.f // 2g
+#define ACCEL_AFS_SEL               0
 
 // default:
 // GYRO_RANGE 250.f

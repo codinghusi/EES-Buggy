@@ -1,5 +1,10 @@
 #include "buggy_controller.h"
 
+void BuggyController::say_hello()
+{
+    motors.motors->say_hello();
+}
+
 void BuggyController::run_over()
 {
     using namespace std::chrono_literals;

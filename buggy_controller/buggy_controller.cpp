@@ -14,6 +14,7 @@ BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_po
     ultrasonic_sensor.config(ultrasonic_handler);
     gyro_sensor.init();
     gyro_sensor.setup_interrupt(GYRO_INTERRUPT_PIN, gyro_handler);
+    gyro_sensor.standby_except_gyro_z();
 
     // --- Calibrate Gyro ---
     std::cout << std::endl;
@@ -23,11 +24,9 @@ BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_po
     {
         std::cout << "Don't move!" << std::endl;
     }
-    gyro_sensor.gyroscope.x = 0;
-    gyro_sensor.gyroscope.y = 0;
-    gyro_sensor.gyroscope.z = 0;
     std::cout << "OK." << std::endl;
-    motors.motors->say_hello();
+    gyro_sensor.reset_gyroscope();
+    say_hello();
 }
 
 void BuggyController::release(){
@@ -126,9 +125,13 @@ void BuggyController::keyboard_control()
             std::cout << "Speed: " << (int) motors.get_speed() << std::endl;
             break;
 
-        // reset gyroscope
         case 'k':
-            gyro_sensor.gyroscope.z = 0;
+            gyro_sensor.reset_gyroscope();
+            std::cout << "Reset gyro to 0" << std::endl;
+            break;
+
+        case 'g':
+            std::cout << "gyroscope.z = " << gyro_sensor.get_gyroscope().z << std::endl;
             break;
 
         case 27:
@@ -168,8 +171,6 @@ void BuggyController::ultrasonic_control()
     } while (1);
 }
 
-// TODO: namings! chronometryInterrupt vs. interruptTriggered
-
 void BuggyController::ultrasonic_handling(){
     ultrasonic_sensor.chronometry_interrupt();
 }
@@ -180,7 +181,7 @@ void BuggyController::gyro_handling(){
 
 void BuggyController::gyro_control() {
     while(true) {
-        motors.set_current_angle(Angle(gyro_sensor.gyroscope.z));
+        motors.set_current_angle(Angle(gyro_sensor.get_gyroscope().z));
         motors.correct();
         std::this_thread::sleep_for(20ms);
     }

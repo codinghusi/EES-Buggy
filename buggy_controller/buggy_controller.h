@@ -36,4 +36,6 @@ public:
     void slalom_motors();
     void slalom_ultrasonic();
     void slalom_gyro();
+
+    void say_hello();
 };

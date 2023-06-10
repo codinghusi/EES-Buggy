@@ -15,6 +15,7 @@ void MPU6050::init() {
   sleep_for(10ms);
   SLEEP = 0;
   FS_SEL = GYRO_FS_SEL;
+  AFS_SEL = ACCEL_AFS_SEL;
 }
 
 void MPU6050::setup_interrupt(uint8_t pinNumber, void (*handler)()) {
@@ -45,6 +46,27 @@ bool MPU6050::calibrate_drift(const std::chrono::duration<float>& duration, cons
   return true;
 }
 
+void MPU6050::standby_except_gyro_z()
+{
+  STBY_XA = 1;
+  STBY_YA = 1;
+  STBY_ZA = 1;
+  STBY_XG = 1;
+  STBY_YG = 1;
+}
+
+Vec3<float> MPU6050::get_gyroscope() const
+{
+  return gyroscope;
+}
+
+void MPU6050::reset_gyroscope()
+{
+  gyroscope.x = 0;
+  gyroscope.y = 0;
+  gyroscope.z = 0;
+}
+
 float MPU6050::convert_raw_gyroscope_value(float oldValue, float value, float drift, float delta) {
   constexpr float alpha = 0.98f;
   constexpr float beta = 1.f - alpha;
@@ -53,7 +75,7 @@ float MPU6050::convert_raw_gyroscope_value(float oldValue, float value, float dr
 }
 
 float MPU6050::convert_raw_accelerometer_value(float value, float delta) {
-  constexpr float mult = 2.f / 32768.f;
+  constexpr float mult = ACCEL_RANGE / 32768.f;
   return value * mult * delta;
 }
 

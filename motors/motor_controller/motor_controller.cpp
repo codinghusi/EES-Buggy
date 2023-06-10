@@ -86,7 +86,8 @@ void MotorController::rotate(Angle target_angle)
 
 void MotorController::brake(bool doLock)
 {
-    if (doLock) {
+    if (doLock)
+    {
         std::unique_lock<std::mutex> lock(motor_mtx);
     }
     state = State::STOPPED;
@@ -116,14 +117,20 @@ void MotorController::correct()
     const float epsilon = ROTATION_EPSILON;
     float diff = angle_difference(target_angle, current_angle).get();
 
-    if (state == State::FORWARD) {
+    if (state == State::FORWARD)
+    {
         float error = abs(diff);
         float correction;
-        if (error >= 5.f) {
+        if (error >= 5.f)
+        {
             correction = 0.f;
-        } else if (error >= 1.f) {
+        }
+        else if (error >= 1.f)
+        {
             correction = 0.1f;
-        } else {
+        }
+        else
+        {
             correction = 1.f;
         }
         if (diff < 0)
@@ -137,7 +144,8 @@ void MotorController::correct()
                 motors->backward_turn_left(correction);
             }
         }
-        else {
+        else
+        {
             if (driving_forward)
             {
                 motors->forward_turn_left(correction);
@@ -148,23 +156,28 @@ void MotorController::correct()
             }
         }
     }
-    else if (state == State::ROTATING) {
+    else if (state == State::ROTATING)
+    {
 
-        if (diff < 0) {
+        if (diff < 0)
+        {
             motors->rotate_right();
         }
-        else {
+        else
+        {
             motors->rotate_left();
         }
 
-        if (abs(diff) < ROTATION_EPSILON) {
+        if (abs(diff) < ROTATION_EPSILON)
+        {
             reset_temporary_speed();
             brake(false);
         }
-        else if (abs(diff) < ROTATION_NEARING_EPSILON) {
+        else if (abs(diff) < ROTATION_NEARING_EPSILON)
+        {
             using namespace std::chrono_literals;
             motors->brake();
             std::this_thread::sleep_for(10ms);
-        } 
+        }
     }
 }

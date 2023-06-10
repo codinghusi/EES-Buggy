@@ -31,5 +31,8 @@
   
 `u` - Program: Run over an object in front (please be careful!)  
 
+`k` - Resets absolute gyroscope
+`g` - Outputs the current gyroscope.z value 
+
 ## config.h
 Defines to configure your pins and speeds

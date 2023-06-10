@@ -16,6 +16,9 @@ private:
   float convert_raw_gyroscope_value(float oldValue, float value, float drift, float delta);
   float convert_raw_accelerometer_value(float value, float delta);
 
+  volatile Vec3<float> gyroscope, accelerometer;
+  Vec3<float> drift;
+
 public:
   MPU6050(uint8_t address = 0x68);
   void setup_interrupt(uint8_t pinNumber, void (*handler)());
@@ -24,10 +27,9 @@ public:
   void clear_interrupt_flag();
   bool calibrate_drift(const std::chrono::duration<float>& duration, const float max_error = 2.f);
 
-public:
-    
-  volatile Vec3<float> gyroscope, accelerometer;
-  Vec3<float> drift;
+  void standby_except_gyro_z();
+  Vec3<float> get_gyroscope() const;
+  void reset_gyroscope();
 
   Byte SELF_TEST_X;
   Byte SELF_TEST_Y;
