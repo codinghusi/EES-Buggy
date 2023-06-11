@@ -28,6 +28,17 @@ BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_po
     gyro_sensor.reset_gyroscope();
 }
 
+void BuggyController::start()
+{
+    std::thread th1(&BuggyController::keyboard_control, &(*this));
+    std::thread th2(&BuggyController::ultrasonic_control, &(*this));
+    std::thread th3(&BuggyController::gyro_control, &(*this));
+
+    th1.join();
+    th2.join();
+    th3.join();
+}
+
 void BuggyController::release()
 {
     motors.release();

@@ -31,6 +31,7 @@ public:
         void (*ultrasonic_handler)(),
         void (*gyro_handler)(),
         int8_t speed);
+    void start();
     void keyboard_control();
     void ultrasonic_handling();
     void ultrasonic_control();

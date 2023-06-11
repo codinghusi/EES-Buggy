@@ -22,14 +22,7 @@ void signal_handler(int signum)
 int main()
 {
     signal(SIGINT, signal_handler);
-
-    std::thread th1(&BuggyController::keyboard_control, &buggy);
-    std::thread th2(&BuggyController::ultrasonic_control, &buggy);
-    std::thread th3(&BuggyController::gyro_control, &buggy);
-
-    th1.join();
-    th2.join();
-    th3.join();
+    BuggyController.start();
     return 0;
 }
 
