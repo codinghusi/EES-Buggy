@@ -40,6 +40,12 @@ public:
         int8_t speed);
 
     /**
+     * Endless loop for handling all features. Will block the current thread.
+     * Runs all features in a seperate thread.
+    */
+    void start();
+
+    /**
      * Endless loop for keyboard handling.
      * Call this function in a separate thread.
     */
