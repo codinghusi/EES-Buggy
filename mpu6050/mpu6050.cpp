@@ -3,22 +3,29 @@
 #include <wiringPi.h>
 #include <math.h>
 #include <chrono>
+#include <thread>
 #include <iostream>
 #include "../config.h"
  
 // TODO: implement Master/Slave
 
 void MPU6050::init() {
+  using namespace std::chrono_literals;
+  using namespace std::this_thread;
+
   std::lock_guard<std::mutex> lock(mtx);
 
   DEVICE_RESET = 1;
-  sleep_for(10ms); 
+  sleep_for(10ms);
   SLEEP = 0;
   FS_SEL = GYRO_FS_SEL;
   AFS_SEL = ACCEL_AFS_SEL;
 }
 
 void MPU6050::setup_interrupt(uint8_t pinNumber, void (*handler)()) {
+  using namespace std::chrono_literals;
+  using namespace std::this_thread;
+
   std::lock_guard<std::mutex> lock(mtx);
 
   INT_LEVEL = 0; // Active HIGH
@@ -102,6 +109,7 @@ void MPU6050::interrupt_triggered() {
   accelerometer.x = convert_raw_accelerometer_value(accel.x, delta);
   accelerometer.y = convert_raw_accelerometer_value(accel.y, delta);
   accelerometer.z = convert_raw_accelerometer_value(accel.z, delta);
+   
   clear_interrupt_flag();
 }
 

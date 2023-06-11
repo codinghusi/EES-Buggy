@@ -25,13 +25,13 @@ void HCSR04::chronometry_interrupt()
 
 }
 
-HCSR04::HCSR04(uint8_t t, uint8_t e, uint8_t bl)
+HCSR04::HCSR04(uint8_t trigger, uint8_t echo, uint8_t bl)
  {
     distance_result = ULTRASONIC_RANGE;
     wait_for_echo = false;
     start = std::chrono::high_resolution_clock::now();
-    trigger = t;
-    echo = e;
+    this->trigger = trigger;
+    this->echo = echo;
     brake_light = bl;
 }
 

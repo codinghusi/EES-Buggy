@@ -25,6 +25,14 @@ class BuggyMotors
   inline float map_speed(uint8_t speed) { return map<uint8_t>(abs(speed), 0, 100, start_speed, 255); }
 
   public:
+
+  /**
+   * @brief Construct a new Buggy Motors object
+   * @param motor_left_port number of the left motor on the motor hat
+   * @param motor_right_port number of the right motor on the motor hat
+   * @param speed initial speed of both motors
+   * @param turnfactor factor for turning speed (0.0 - 1.0)
+  */
   BuggyMotors(uint8_t motor_left_port, uint8_t motor_right_port, uint8_t speed = 100, float turnfactor = 0.9);
   ~BuggyMotors();
   void say_hello();

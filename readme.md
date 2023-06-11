@@ -29,11 +29,11 @@
 `p` - Routine: Drive a slalom with ultra sonic without gyro  
 `O` - Routine: Drive a slalom with gyro and ultra sonic  
   
-`u` - Routine: Run over an object in front (please be careful!)
-`h` - Routine: Say hello
+`u` - Routine: Run over an object in front (please be careful!)  
+`h` - Routine: Say hello  
 
-`k` - Resets absolute gyroscope
-`g` - Outputs the current gyroscope.z value 
+`k` - Resets absolute gyroscope  
+`g` - Outputs the current gyroscope.z value  
 
 ## config.h
 Defines to configure your pins and speeds

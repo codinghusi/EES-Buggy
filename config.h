@@ -12,13 +12,13 @@
 //defines f�r den Ultraschall
 #define SONIC_SPEED                 343.20
 #define ULTRASONIC_RANGE            400
-#define ECHO                        GPIO_PIN_NO_22
-#define TRIGGER                     GPIO_PIN_NO_23
+#define TRIGGER                     GPIO_PIN_NO_22
+#define ECHO                        GPIO_PIN_NO_23
 #define BRAKE_LIGHT                 GPIO_PIN_NO_24
 
 // Für den Gyro
 #define GYRO_INTERRUPT_PIN          GPIO_PIN_NO_6
-#define GYRO_CALIBRATION_ERROR      2.f
+#define GYRO_CALIBRATION_ERROR      3.f
 
 // default:
 // #define GYRO_RANGE 250.f            // 250 deg/s

@@ -48,28 +48,36 @@ void BuggyController::circumnavigate_no_gyro()
     auto forwardtime = 1s;
     auto dodgetime = 2s;
 
+    // rotate
     circumnavigate_right ? motors.motors->rotate_right() : motors.motors->rotate_left();
     sleep_for(rotationtime);
     
+    // drive forward
     motors.motors->forward();
     sleep_for(forwardtime);
     
+    // rotate opposite direction
     circumnavigate_right ? motors.motors->rotate_left() : motors.motors->rotate_right();
     sleep_for(rotationtime);
     
+    // drive forward
     motors.motors->forward();
     sleep_for(dodgetime);
     
+    // rotate opposite direction
     circumnavigate_right ? motors.motors->rotate_left() : motors.motors->rotate_right();
     sleep_for(rotationtime);
     motors.motors->forward();
 
+    // drive forward
     sleep_for(forwardtime);
     circumnavigate_right ? motors.motors->rotate_right() : motors.motors->rotate_left();
     
+    // rotate opposite direction
     sleep_for(rotationtime);
     motors.motors->brake();
     
+    // next time drive slalom the other way around
     circumnavigate_right = !circumnavigate_right;
 }
 
@@ -85,6 +93,7 @@ void BuggyController::circumnavigate_gyro()
     gyro_sensor.reset_gyroscope();
     motors.set_current_angle(Angle(0));
 
+    // In case it's set to backwards()
     motors.forwards();
 
     motors.rotate(angle);
@@ -102,6 +111,7 @@ void BuggyController::circumnavigate_gyro()
     motors.rotate(0);
     motors.wait_for_rotation();
 
+    // next time drive slalom the other way around
     circumnavigate_right = !circumnavigate_right;
 }
 
@@ -141,7 +151,6 @@ void BuggyController::rectangle_no_gyro()
 
 void BuggyController::rectangle_gyro()
 {
-    // reset gyroscope
     using namespace std::this_thread;
     using namespace std::chrono_literals;
 
@@ -197,8 +206,10 @@ void BuggyController::slalom_motors()
 
 void BuggyController::slalom_ultrasonic()
 {
+    // because we have no gyro stabilization
     uint8_t leftspeed = 19;
     uint8_t rightspeed = 22;
+
     motors.motors->set_speed_left(leftspeed);
     motors.motors->set_speed_right(rightspeed);
     motors.motors->forward();

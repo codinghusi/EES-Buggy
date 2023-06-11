@@ -22,4 +22,8 @@ public:
     Angle& operator=(const float& angle);
 };
 
+/**
+ * Difference between two angles: a - b.
+ * Returns an angle between -180 and 180 degrees.
+*/
 Angle angle_difference(Angle a, Angle b);
