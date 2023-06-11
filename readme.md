@@ -13,6 +13,7 @@
 `s` - Drive backward  
 `a` - Drive forward with turn until 90 degrees, then drive forward  
 `d` - Drive forward with turn until 90 degrees, then drive forward  
+`b` - Stops the buggy. Any other key that is not assigned an action will do the same. If there's an obstacle, it will also default any key except `s` to `b`  
 `+` - Increase speed +5%  
 `-` - Decrease speed -5%  
   
