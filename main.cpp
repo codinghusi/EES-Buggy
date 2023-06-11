@@ -1,5 +1,3 @@
-#include <thread>
-#include <chrono>
 #include <signal.h>
 #include <iostream>
 #include "buggy_controller/buggy_controller.h"
@@ -15,14 +13,14 @@ void signal_handler(int signum)
 {
     std::cout << "Strg-C Programmende" << std::endl;
     buggy.release();
-	disable_raw_mode();
+    disable_raw_mode();
     exit(signum);
 }
 
 int main()
 {
     signal(SIGINT, signal_handler);
-    BuggyController.start();
+    buggy.start();
     return 0;
 }
 
