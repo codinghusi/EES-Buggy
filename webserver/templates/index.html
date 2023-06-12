@@ -8,24 +8,21 @@
 </form>
 
 <script>
-  document.body.addEventListener("keydown", e => {
-    const key = e.key;
-    switch(key) {
-      case 'w':
-          document.getElementById('w').click();
-          break;
-        case 'd':
-          document.getElementById('d').click();
-          break;
-        case 'a':
-          document.getElementById('a').click();
-          break;
-        case 's':
-          document.getElementById('s').click();
-          break;
-        case ' ':
-          document.getElementById("' '").click();
-          break;
-    }
-  })
+const keyIdMap = {
+  'w': 'w',
+  'a': 'a',
+  's': 's',
+  'd': 'd',
+  ' ': "' '",
+  'q': 'q',
+  'e': 'e'
+};
+
+document.body.addEventListener("keydown", e => {
+  const key = e.key;
+  const id = keyIdMap[key];
+  if (id) {
+    document.getElementById(id).click();
+  }
+})
   </script>
