@@ -69,5 +69,5 @@
 #define GPIO_PIN_NO_26				25
 #define GPIO_PIN_NO_27				2
 
-
-
+// Socket
+#define SOCKET_PORT 8080

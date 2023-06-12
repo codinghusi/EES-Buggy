@@ -5,6 +5,7 @@
 CC = g++
 CFLAGS = -g -lwiringPi -pthread
 OBJ_NAME = main
+.PHONY: webserver
 
 OBJ_DIR = ./obj
 EXCLUDE = test-main.cpp
@@ -51,3 +52,6 @@ shit:
 
 gyro-test:
 	make shit -C mpu6050
+
+webserver:
+	flask --app ./webserver/main run --host 0.0.0.0

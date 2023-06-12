@@ -1,0 +1,123 @@
+<style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+  }
+
+  input {
+    /* padding: 1rem; */
+    width: 5rem;
+    height: 5rem;
+    margin: 0.5rem;
+  }
+
+  .smaller {
+      width: 3rem;
+      height: 3rem;
+    }
+
+  .fill-row {
+    grid-column: 1 / 4;
+    width: 100%;
+  }
+
+  #w {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #a {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  #s {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  #d {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+<h1>CONTROL YOUR BUGGY</h1>
+<form method="post" action="/" id="form">
+  <div class="grid-container">
+    <input type="submit" value="q" id="q" name="q" class="smaller">
+    <input type="submit" value="w" id="w" name="w">
+    <input type="submit" value="e" id="e" name="e" class="smaller">
+    <input type="submit" value="a" id="a" name="a">
+    <input type="submit" value="s" id="s" name="s">
+    <input type="submit" value="d" id="d" name="d">
+    <input type="submit" value="Brake" id=" " name=" " class="fill-row">
+  </div>
+
+  <h2>Speed</h2>
+  <div class="flex">
+    <input type="submit" value="+" id="+" name="+">
+    <input type="submit" value="-" id="-" name="-">
+  </div>
+  
+  <h2>Motor</h2>
+  <div class="flex">
+    <input type="submit" value="Circumnavigate" id="c" name="c">
+    <input type="submit" value="Rectangle" id="r" name="r">
+    <input type="submit" value="Slalom" id="o" name="o">
+  </div>
+
+  <h2>Ultrasonic</h2>
+  <div class="flex">
+    <input type="submit" value="Slalom" id="p" name="p">
+  </div>
+
+  <h2>Gyro</h2>
+  <div class="flex">
+    <input type="submit" value="Circumnavigate" id="C" name="C">
+    <input type="submit" value="Rectangle" id="R" name="R">
+    <input type="submit" value="Slalom" id="O" name="O">
+    <input type="submit" value="Reset" id="k" name="k">
+  </div>
+
+  <h2>Others</h2>
+  <div class="flex">
+    <input type="submit" value="Easteregg. Be careful ;)" id="u" name="u">
+    <input type="submit" value="Hello" id="h" name="h">
+  </div>
+</form>
+
+<script>
+  function send(key) {
+    const formdata = new FormData();
+    formdata.append(key, key);
+    fetch('/', {
+      method: 'POST',
+      body: formdata
+    })
+  }
+
+  document.body.addEventListener('keydown', e => {
+    send(e.key);
+  });
+
+  document.getElementById('form').addEventListener('submit', e => {
+    e.preventDefault();
+    send(e.submitter.name);
+  });
+  
+</script>

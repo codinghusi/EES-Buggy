@@ -10,6 +10,8 @@
 #include "../hcsr04/hcsr04.h"
 #include "../mpu6050/mpu6050.h"
 #include "../motors/motor_controller/motor_controller.h"
+#include "../socket/socket.h"
+#include <mutex>
 
 /**
  * Takes control over the buggy
@@ -25,10 +27,12 @@ private:
     MotorController motors;
     HCSR04 ultrasonic_sensor;
     MPU6050 gyro_sensor;
+    Socket socket;
     float target_angle = 0;
     float motor_relation = 1.f;
     bool prevent_forward;
     bool circumnavigate_right = true;
+    std::mutex execute_command_mtx;
 
 public:
     /**
@@ -37,19 +41,25 @@ public:
      * @param ultrasonic_handler function pointer will be called when ultrasonic sensor triggers its echo interrupt
      * @param gyro_handler function will be callend when gyro sensor triggers its interrupt
      * @param speed initial speed of both motors
-    */
+     * @param socketport port to connect the socket to
+     */
     BuggyController(
         uint8_t motor_left_port,
         uint8_t motor_right_port,
         void (*ultrasonic_handler)(),
         void (*gyro_handler)(),
-        int8_t speed);
+        int8_t speed,
+        uint16_t socketport);
+
+    ~BuggyController();
 
     /**
      * Endless loop for handling all features. Will block the current thread.
      * Runs all features in a seperate thread.
-    */
+     */
     void start();
+
+    void execute_command(char command);
 
     /**
      * Endless loop for keyboard handling.
@@ -77,6 +87,12 @@ public:
      * Endless loop for gyro stabilization for motors.
     */
     void gyro_control();
+
+    /**
+     * Endless loop for socket handling.
+     * Call this function in a separate thread.
+     */
+    void socket_control();
 
     /**
      * Release motors. Important when stopping the program.
