@@ -8,6 +8,10 @@
 `make`  
 `make run`
 
+## Start webinterface
+`make webserver`  
+Connect webbrowser via shown ip address  
+
 ## Commands
 `w` - Drive forward  
 `s` - Drive backward  

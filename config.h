@@ -34,7 +34,7 @@
 
 // custom:
 #define GYRO_RANGE 250.f            // 250 deg/s
-#define GYRO_FS_SEL                 3  // 3 = +/- 2000 deg/s
+#define GYRO_FS_SEL                 3
 #define ACCEL_RANGE                 2.f // 2g
 #define ACCEL_AFS_SEL               0
 
@@ -69,5 +69,5 @@
 #define GPIO_PIN_NO_26				25
 #define GPIO_PIN_NO_27				2
 
-// Socket
+// Webserver
 #define SOCKET_PORT 8080
