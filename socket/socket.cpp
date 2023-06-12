@@ -48,10 +48,13 @@ void Socket::close()
     shutdown(server_fd, SHUT_RDWR);
 }
 
-char Socket::read()
+bool Socket::read(char* c)
 {
-    ::read(new_socket, buffer, 1);
-    return buffer[0];
+    if (::read(new_socket, buffer, 1)) {
+        *c = buffer[0];
+        return true;
+    }
+    return false;    
 }
 
 void Socket::send(const char *msg)

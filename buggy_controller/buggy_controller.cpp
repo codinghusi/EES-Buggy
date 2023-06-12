@@ -26,7 +26,6 @@ BuggyController::BuggyController(uint8_t motor_left_port, uint8_t motor_right_po
     }
     std::cout << "OK." << std::endl;
     gyro_sensor.reset_gyroscope();
-    socket.create();
 }
 
 BuggyController::~BuggyController()
@@ -260,10 +259,13 @@ void BuggyController::gyro_control()
 
 void BuggyController::socket_control()
 {
+    std::cout << "waiting for python" << std::endl;
+    socket.create();
+    std::cout << "got him" << std::endl;
+
     char c;
-    while (true)
+    while (socket.read(&c))
     {
-        c = socket.read();
         std::lock_guard<std::mutex> lock(execute_command_mtx);
         execute_command(c);
     }

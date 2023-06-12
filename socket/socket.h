@@ -12,12 +12,12 @@ class Socket
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
-    char buffer;
+    char buffer[1];
 
 public:
     Socket(uint16_t port) : port{port} {}
     void create();
     void close();
-    char read();
+    bool read(char* c);
     void send(const char *msg);
-}
+};
