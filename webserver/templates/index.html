@@ -1,0 +1,31 @@
+<h1>Test</h1>
+<form method="post" action="/">
+  <input type="submit" value="w" id="w" name="w">
+  <input type="submit" value="a" id="a" name="a">
+  <input type="submit" value="s" id="s" name="s">
+  <input type="submit" value="d" id="d" name="d">
+  <input type="submit" value="' '" id="' '" name="' '">
+</form>
+
+<script>
+  document.body.addEventListener("keydown", e => {
+    const key = e.key;
+    switch(key) {
+      case 'w':
+          document.getElementById('w').click();
+          break;
+        case 'd':
+          document.getElementById('d').click();
+          break;
+        case 'a':
+          document.getElementById('a').click();
+          break;
+        case 's':
+          document.getElementById('s').click();
+          break;
+        case ' ':
+          document.getElementById("' '").click();
+          break;
+    }
+  })
+  </script>
