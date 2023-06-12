@@ -6,3 +6,26 @@
   <input type="button" value="d">
   <input type="button" value="' '">
 </form>
+
+<script>
+document.body.addEventListener("keydown", e => {
+  const key = e.key;
+  switch(key) {
+    case 'w':
+        document.getElementById('w').click();
+        break;
+      case 'w':
+        document.getElementById('a').click();
+        break;
+      case 'a':
+        document.getElementById('s').click();
+        break;
+      case 's':
+        document.getElementById('d').click();
+        break;
+      case ' ':
+        document.getElementById(' ').click();
+        break;
+  }
+})
+</script>
