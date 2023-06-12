@@ -39,10 +39,12 @@ void BuggyController::start()
     std::thread th1(&BuggyController::keyboard_control, &(*this));
     std::thread th2(&BuggyController::ultrasonic_control, &(*this));
     std::thread th3(&BuggyController::gyro_control, &(*this));
+    std::thread th4(&BuggyController::socket_control, &(*this));
 
     th1.join();
     th2.join();
     th3.join();
+    th4.join();
 }
 
 void BuggyController::release()
