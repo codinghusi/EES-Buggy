@@ -50,4 +50,4 @@ gyro-test:
 	make shit -C mpu6050
 
 webserver:
-	flask --app ./webserver/main run --host 0.0.0.0 
+	flask --app ./webserver/main run --host 0.0.0.0

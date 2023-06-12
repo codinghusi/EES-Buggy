@@ -259,14 +259,21 @@ void BuggyController::gyro_control()
 
 void BuggyController::socket_control()
 {
-    std::cout << "waiting for python" << std::endl;
-    socket.create();
-    std::cout << "got him" << std::endl;
+    while (true) {
+        std::cout << "waiting for python" << std::endl;
+        socket.create();
+        std::cout << "got him" << std::endl;
 
-    char c;
-    while (socket.read(&c))
-    {
-        std::lock_guard<std::mutex> lock(execute_command_mtx);
-        execute_command(c);
+        char c;
+        while (socket.read(&c))
+        {
+            std::cout << c << std::endl;
+            std::lock_guard<std::mutex> lock(execute_command_mtx);
+            execute_command(c);
+        }
+
+        std::cout << "python disconnected" << std::endl;
+        socket.close();
     }
+    
 }
