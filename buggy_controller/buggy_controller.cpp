@@ -224,7 +224,7 @@ void BuggyController::ultrasonic_control()
             prevent_forward = false;
             ultrasonic_sensor.brake_light_off();
         }
-        sleep_for(20ms);
+        sleep_for(20ms); // Sensor is capable of max. 50 Hz measurements
         ultrasonic_sensor.distance_measurement();
     }
 }
