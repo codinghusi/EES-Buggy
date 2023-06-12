@@ -21,6 +21,7 @@ private:
 
 public:
   MPU6050(uint8_t address = 0x68);
+
   void setup_interrupt(uint8_t pinNumber, void (*handler)());
   void interrupt_triggered();
   void init();

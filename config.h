@@ -9,7 +9,7 @@
 #define ROTATION_NEARING_EPSILON    10
 
 
-//defines f�r den Ultraschall
+// Ultraschall
 #define SONIC_SPEED                 343.20
 #define ULTRASONIC_RANGE            400
 #define TRIGGER                     GPIO_PIN_NO_22
@@ -23,9 +23,12 @@
 // default:
 // #define GYRO_RANGE 250.f            // 250 deg/s
 // #define GYRO_FS_SEL 0               // 0 = +/- 250 deg/s
+// #define ACCEL_RANGE                 2.f // 2g
+// #define ACCEL_AFS_SEL               0
+
 // custom:
 #define GYRO_RANGE 250.f            // 250 deg/s
-#define GYRO_FS_SEL                 3  // 3 = +/- 2000 deg/sR
+#define GYRO_FS_SEL                 3  // 3 = +/- 2000 deg/s
 #define ACCEL_RANGE                 2.f // 2g
 #define ACCEL_AFS_SEL               0
 
