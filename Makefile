@@ -1,3 +1,7 @@
+# Dieser Code ist im Abschlussprojekt des Moduls "Einführung in Embedded Software" entstanden.
+# Hannah Lehnen, Timur Gönül und Gerrit Weiermann
+# Gruppe 18, Slot D
+
 CC = g++
 CFLAGS = -g -lwiringPi -pthread
 OBJ_NAME = main

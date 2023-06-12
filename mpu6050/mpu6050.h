@@ -1,3 +1,9 @@
+/**
+ * Dieser Code ist im Abschlussprojekt des Moduls "Einführung in Embedded Software" entstanden.
+ * Hannah Lehnen, Timur Gönül und Gerrit Weiermann
+ * Gruppe 18, Slot D
+*/
+
 #include "utils/distributed_bits.hpp"
 #include "utils/word.hpp"
 #include "utils/bits.hpp"
@@ -15,22 +21,61 @@ private:
 
   float convert_raw_gyroscope_value(float oldValue, float value, float drift, float delta);
   float convert_raw_accelerometer_value(float value, float delta);
+  void clear_interrupt_flag();
 
   volatile Vec3<float> gyroscope, accelerometer;
   Vec3<float> drift;
 
 public:
+  /**
+   * @brief Construct a new MPU6050 object
+   * @param address The I2C address of the MPU6050. AD0 = LOW -> 0x68, AD0 = HIGH -> 0x69
+  */
   MPU6050(uint8_t address = 0x68);
 
-  void setup_interrupt(uint8_t pinNumber, void (*handler)());
-  void interrupt_triggered();
+  /**
+   * @brief Initialize the MPU6050
+  */
   void init();
-  void clear_interrupt_flag();
+
+  /**
+   * @brief Initialize the use of the interrupt. Doesn't work without.
+   * @param pinNumber The pin number of the interrupt pin
+   * @param handler The handler function that will be called when the interrupt is triggered
+  */
+  void setup_interrupt(uint8_t pinNumber, void (*handler)());
+
+  /**
+   * @brief Call this method in the interrupt handler
+  */
+  void interrupt_triggered();
+  
+  /**
+   * @brief Call when the MPU6050 is not moving. This will calibrate the gyroscope drift that will be automatically subtracted from the gyroscope values
+   * @param duration The duration of the calibration
+   * @param max_error The maximum error that is allowed
+   * @return true if the error exceeded the max_error
+  */
   bool calibrate_drift(const std::chrono::duration<float>& duration, const float max_error = 2.f);
 
+  /**
+   * @brief Puts all sensors in standby mode except the gyroscope z-axis
+  */
   void standby_except_gyro_z();
+
+  /**
+   * @return returns the absolute gyroscope values (calculated in background through interrupts)
+  */
   Vec3<float> get_gyroscope() const;
+
+  /**
+   * @brief @return returns what drift was measured by calibrate_drift(...)
+  */
   Vec3<float> get_drift() const;
+
+  /**
+   * sets all gyroscope values xyz to 0
+  */
   void reset_gyroscope();
 
   Byte SELF_TEST_X;

@@ -1,3 +1,9 @@
+/**
+ * Dieser Code ist im Abschlussprojekt des Moduls "Einführung in Embedded Software" entstanden.
+ * Hannah Lehnen, Timur Gönül und Gerrit Weiermann
+ * Gruppe 18, Slot D
+*/
+
 #pragma once
 #include <math.h>
 #include <iostream>

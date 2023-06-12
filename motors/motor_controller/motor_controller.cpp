@@ -1,3 +1,9 @@
+/**
+ * Dieser Code ist im Abschlussprojekt des Moduls "Einführung in Embedded Software" entstanden.
+ * Hannah Lehnen, Timur Gönül und Gerrit Weiermann
+ * Gruppe 18, Slot D
+*/
+
 #include "motor_controller.h"
 #include <iostream>
 #include "../../config.h"
