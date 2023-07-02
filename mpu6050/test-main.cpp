@@ -68,6 +68,7 @@ void setup() {
 
 void loop() {
   cout << '\r';
+  cout << (int) gyro.ACCEL_X;
   cout << (int) gyro.get_gyroscope().x << "   ";
   cout << (int) gyro.get_gyroscope().y << "   ";
   cout << (int) gyro.get_gyroscope().z << "   ";
